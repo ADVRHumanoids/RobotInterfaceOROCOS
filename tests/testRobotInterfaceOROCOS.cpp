@@ -31,6 +31,8 @@ public:
 
         this->addOperation("attachToRobot", &robot_interface_orocos_test::attachToRobot,
                     this, RTT::ClientThread);
+        this->addOperation("sense", &robot_interface_orocos_test::sense,
+                    this, RTT::ClientThread);
     }
 
     bool configureHook()
@@ -53,16 +55,46 @@ public:
 
     }
 
+    bool sense()
+    {
+        _robot->sense();
+        _robot->getJointPosition(q);
+        _robot->getJointVelocity(qdot);
+        _robot->getJointEffort(tau);
+
+        std::cout<<"q: "<<q<<std::endl;
+        std::cout<<"qdot: "<<qdot<<std::endl;
+        std::cout<<"tau: "<<tau<<std::endl;
+
+        return true;
+    }
+
     bool attachToRobot(const std::string &robot_name, const std::string &config_path)
     {
-        XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, config_path,
+        bool a =  XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, config_path,
             _robot, std::shared_ptr<RTT::TaskContext>(this));
 
+        if(!a)
+            RTT::log(RTT::Error)<<"ERROR!!! attachToRobot returned false"<<RTT::endlog();
+        if(!_robot)
+            RTT::log(RTT::Error)<<"ERROR!!! _robot is invalid pointer"<<RTT::endlog();
+
+
+        std::cout<<"robot_name has "<<_robot->getJointNum()<<" dofs"<<std::endl;
+
+        q.setZero(_robot->getJointNum());
+        qdot.setZero(_robot->getJointNum());
+        tau.setZero(_robot->getJointNum());
+
+        return a;
     }
 
 
 private:
     XBot::RobotInterface::Ptr _robot;
+    Eigen::VectorXd q;
+    Eigen::VectorXd qdot;
+    Eigen::VectorXd tau;
 };
 
 ORO_CREATE_COMPONENT_LIBRARY()ORO_LIST_COMPONENT_TYPE(robot_interface_orocos_test)

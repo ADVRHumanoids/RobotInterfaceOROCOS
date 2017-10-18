@@ -28,7 +28,7 @@ using namespace rstrt::kinematics;
 using namespace rstrt::robot;
 
 bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, const std::string &config_path,
-                                         XBot::RobotInterface::Ptr _robot,
+                                         XBot::RobotInterface::Ptr& _robot,
                                          std::shared_ptr<RTT::TaskContext> task)
 {
     RTT::log(RTT::Info)<<"Robot name: "<<robot_name<<RTT::endlog();
@@ -45,7 +45,10 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, co
 
     _robot = XBot::RobotInterface::getRobot(config_path, anymap);
     if(_robot)
+    {
+        RTT::log(RTT::Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<RTT::endlog();
         return true;
+    }
     RTT::log(RTT::Error)<<"CAN NOT LOAD ROBOT INTERFACE OROCOS"<<RTT::endlog();
     return false;
 
@@ -54,6 +57,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, co
 bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyMapConstPtr any_map)
 {
     RTT::log(RTT::Info)<<"Constructing OROCOS implementation of RobotInterface!"<<RTT::endlog();
+    RTT::log(RTT::Info)<<"Robot has "<<this->getJointNum()<<" dofs"<<RTT::endlog();
 
     _q.setZero(this->getJointNum());
     _qdot.setZero(this->getJointNum());

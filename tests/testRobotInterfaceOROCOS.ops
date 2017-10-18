@@ -49,4 +49,3 @@ var string config_path = os.getenv("ROBOTOLOGY_ROOT") + "/external/RobotInterfac
 addPeer("interface_test", "cogimon")
 interface_test.attachToRobot("cogimon", config_path)
 
-

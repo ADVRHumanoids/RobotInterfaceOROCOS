@@ -1,7 +1,7 @@
 0.000 [ Info   ][Logger] No ORO_LOGLEVEL environment variable set.
 0.000 [ Info   ][Logger]  OROCOS version '2.7.0' compiled with GCC 4.8.4. Running in GNU/Linux.
 0.000 [ Info   ][Logger] Orocos Logging Activated at level : [ Warning] ( 4 ) 
-0.000 [ Info   ][Logger] Reference System Time is : 1508343592856399235 ticks ( 1.50834e+09 seconds ).
+0.000 [ Info   ][Logger] Reference System Time is : 1508345225950463307 ticks ( 1.50835e+09 seconds ).
 0.000 [ Info   ][Logger] Logging is relative to this time.
 0.000 [ Info   ][Logger] RTT_COMPONENT_PATH was set to: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS . Searching in: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS
 0.000 [ Info   ][Logger] plugin 'rtt' not loaded before.
@@ -13,317 +13,319 @@
 0.001 [ Info   ][Logger] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/./types ...
 0.002 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://rtt-types.
 0.002 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-mqueue-transport' from 'rtt-transport-mqueue'
-0.016 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://rtt-types.
-0.016 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-corba-types' from 'rtt-transport-corba'
-0.033 [ Info   ][TypekitRepository::Import] Loading Typekit rtt-types.
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for int
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for int
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for uint
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for uint
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for double
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for double
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for float
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for float
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for char
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for char
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for bool
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for bool
-0.033 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for void
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for ConnPolicy
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for TaskContext
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for string
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for array
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for array
-0.034 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for rt_string
-0.034 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-types' from 'rtt-typekit'
-0.034 [ Info   ][Logger] Loading typekit libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/./types ...
-0.034 [ Info   ][Logger] RTT_COMPONENT_PATH was set to: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS . Searching in: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS
-0.034 [ Info   ][Logger] OCL factory set for real-time logging
-0.034 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='Deployer'
-0.034 [ Info   ][Deployer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24808 ).
-0.034 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='GlobalEngine'
-0.034 [ Info   ][GlobalEngine] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24809 ).
-0.035 [ Info   ][Logger] No site file was found. Importing 'ocl' by default.
-0.035 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl ...
-0.036 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaTLSFComponent'
-0.041 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::logging::Log4cxxAppender'
-0.055 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-netcdf-gnulinux.so'
-0.055 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::NetcdfReporting'
-0.057 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-timer-gnulinux.so'
-0.057 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-gnulinux.so'
-0.058 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-common-gnulinux.so'
-0.058 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaComponent'
-0.060 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::HelloWorld'
-0.060 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-logging-gnulinux.so'
-0.061 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/types ...
-0.063 [ Info   ][TypekitRepository::Import] Loading Typekit OCLTypekit.
-0.063 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'OCLTypekit' from 'ocl'
-0.063 [ Info   ][ComponentLoader::import(path_list)] Loading plugin libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/plugins ...
-0.064 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'LuaTLSF' from 'rttlua-tlsf-plugin'
-0.065 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'print' from 'print'
-0.066 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'Lua' from 'rttlua-plugin'
-0.067 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'os' from 'os'
-0.067 [ Info   ][Logger] Loading Service or Plugin scripting in TaskContext Deployer
-0.068 [ Info   ][Logger] Found complete interface of requested service 'scripting'
-0.068 [ Info   ][Logger] Running Script testRobotInterfaceOROCOS.ops ...
-0.069 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/eigen_typekit ...
-0.069 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/eigen_typekit/types ...
-0.076 [ Info   ][TypekitRepository::Import] Loading Typekit Eigen.
-0.076 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'Eigen' from 'eigen_typekit'
-0.077 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://Eigen.
-0.077 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for eigen_matrix
-0.077 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for eigen_vector
-0.077 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'eigen-corba-types' from 'eigen-transport-corba'
-0.078 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://Eigen.
-0.078 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for eigen_matrix
-0.078 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for eigen_vector
-0.078 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'eigen-mqueue-types' from 'eigen-transport-mqueue'
-0.078 [ Info   ][ComponentLoader::import(path_list)] Importing directory /opt/ros/indigo/lib/orocos/gnulinux/eigen_typekit ...
-0.078 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/eigen_typekit/types ...
-0.079 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/kdl_typekit ...
-0.098 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'KDLTypekitTestComponent'
-0.098 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/kdl_typekit/types ...
-0.112 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://KDL.
-0.112 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'kdl-mqueue-types' from 'kdl-transport-mqueue'
-0.118 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://KDL.
-0.118 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'kdl-corba-types' from 'kdl-transport-corba'
-0.218 [ Info   ][TypekitRepository::Import] Loading Typekit KDL.
-0.218 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Frame
-0.218 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Frame
-0.218 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Jacobian
-0.218 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Jacobian
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.JntArray
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.JntArray
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Rotation
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Rotation
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Twist
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Twist
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Vector
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Vector
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Wrench
-0.219 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Wrench
-0.220 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'KDL' from 'kdl_typekit'
-0.220 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rst-rt_typekit ...
-0.220 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rst-rt_typekit/types ...
-0.387 [ Info   ][TypekitRepository::Import] Loading Typekit rst-rt.
-0.389 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'rst-rt' from 'rst-rt_typekit'
-0.390 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_gazebo_embedded ...
-0.511 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'RTTGazeboEmbedded'
-0.513 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'ModelPluginExample'
-0.514 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='gazebo'
-0.514 [ Info   ][gazebo] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24811 ).
-0.514 [ Info   ][loadComponent] Creating gazebo with gazebo embedded !
-0.515 [ Info   ][loadComponent] Adding gazebo as new peer:  OK.
-0.515 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=10, CPU affinity=4294967295, with name='gazebo'
-0.515 [ Warning][Thread] Forcing priority (10) of thread with SCHED_OTHER policy to 0.
-0.515 [ Info   ][gazebo] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24812 ).
-0.517 [ Info   ][ScriptingService] Creating world at /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/empty.world
-1.611 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt-gazebo-robot-sim ...
-1.709 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt-gazebo-robot-sim/librtt-gazebo-robot-sim-gnulinux.so'
-1.710 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='cogimon'
-1.710 [ Info   ][cogimon] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24835 ).
-1.710 [ Info   ][loadComponent] Adding cogimon as new peer:  OK.
-1.711 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=11, CPU affinity=4294967295, with name='cogimon'
-1.711 [ Warning][Thread] Forcing priority (11) of thread with SCHED_OTHER policy to 0.
-1.711 [ Info   ][cogimon] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24836 ).
-1.712 [ Info   ][ScriptingService] URDF path: /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/model.urdf
-1.712 [ Info   ][ScriptingService] SRDF path: /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/cogimon.srdf
-1.716 [ Info   ][ScriptingService] chain #0 left_leg
-1.716 [ Info   ][ScriptingService]   LHipLat
-1.716 [ Info   ][ScriptingService]   LHipSag
-1.716 [ Info   ][ScriptingService]   LHipYaw
-1.716 [ Info   ][ScriptingService]   LKneePitch
-1.716 [ Info   ][ScriptingService]   LAnklePitch
-1.716 [ Info   ][ScriptingService]   LAnkleRoll
-1.716 [ Info   ][ScriptingService] chain #1 right_leg
-1.716 [ Info   ][ScriptingService]   RHipLat
-1.716 [ Info   ][ScriptingService]   RHipSag
-1.716 [ Info   ][ScriptingService]   RHipYaw
-1.716 [ Info   ][ScriptingService]   RKneePitch
-1.716 [ Info   ][ScriptingService]   RAnklePitch
-1.716 [ Info   ][ScriptingService]   RAnkleRoll
-1.717 [ Info   ][ScriptingService] Model [cogimon] successfully loaded !
-1.717 [ Info   ][ScriptingService] Model name cogimon
-1.717 [ Info   ][ScriptingService] Model has 12 joints
-1.717 [ Info   ][ScriptingService] Model has 13 links
-1.717 [ Info   ][ScriptingService] Creating Kinematic Chain left_leg
-1.717 [ Info   ][ScriptingService] Joints: 
-1.717 [ Info   ][ScriptingService]     LHipLat
-1.717 [ Info   ][ScriptingService]     LHipSag
-1.717 [ Info   ][ScriptingService]     LHipYaw
-1.717 [ Info   ][ScriptingService]     LKneePitch
-1.717 [ Info   ][ScriptingService]     LAnklePitch
-1.717 [ Info   ][ScriptingService]     LAnkleRoll
-1.717 [ Info   ][ScriptingService] Creating Kinematic Chain right_leg
-1.717 [ Info   ][ScriptingService] Joints: 
-1.717 [ Info   ][ScriptingService]     RHipLat
-1.717 [ Info   ][ScriptingService]     RHipSag
-1.717 [ Info   ][ScriptingService]     RHipYaw
-1.717 [ Info   ][ScriptingService]     RKneePitch
-1.717 [ Info   ][ScriptingService]     RAnklePitch
-1.717 [ Info   ][ScriptingService]     RAnkleRoll
-1.717 [ Info   ][ScriptingService] Kinematic Chains map created!
-1.717 [ Info   ][ScriptingService] Available controllers for left_leg are:
-1.717 [ Info   ][ScriptingService]   JointPositionCtrl
-1.717 [ Info   ][ScriptingService]   JointImpedanceCtrl
-1.717 [ Info   ][ScriptingService]   JointTorqueCtrl
-1.717 [ Info   ][ScriptingService] Joint LAnklePitch in chain left_leg has scoped name cogimon::LAnklePitch
-1.717 [ Info   ][ScriptingService] Joint LAnkleRoll in chain left_leg has scoped name cogimon::LAnkleRoll
-1.717 [ Info   ][ScriptingService] Joint LHipLat in chain left_leg has scoped name cogimon::LHipLat
-1.717 [ Info   ][ScriptingService] Joint LHipSag in chain left_leg has scoped name cogimon::LHipSag
-1.717 [ Info   ][ScriptingService] Joint LHipYaw in chain left_leg has scoped name cogimon::LHipYaw
-1.717 [ Info   ][ScriptingService] Joint LKneePitch in chain left_leg has scoped name cogimon::LKneePitch
-1.717 [ Info   ][ScriptingService] JointPositionCtrl activated!
-1.717 [ Info   ][ScriptingService] JointImpedanceCtrl activated!
-1.717 [ Info   ][ScriptingService] JointTorqueCtrl activated!
-1.718 [ Info   ][ScriptingService] Full feedback activated!
-1.718 [ Info   ][ScriptingService] left_leg PIDs:
-1.718 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
-1.718 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
-1.718 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
-1.718 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
-1.718 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
-1.718 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
-1.718 [ Info   ][ScriptingService] Gazebo Joint Controlled inited!
-1.718 [ Info   ][ScriptingService] Initial Position set!
-1.718 [ Info   ][ScriptingService] left_leg impedance:
-1.718 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService] Initial Impedance set!
-1.718 [ Info   ][ScriptingService] Available controllers for right_leg are:
-1.718 [ Info   ][ScriptingService]   JointPositionCtrl
-1.718 [ Info   ][ScriptingService]   JointImpedanceCtrl
-1.718 [ Info   ][ScriptingService]   JointTorqueCtrl
-1.718 [ Info   ][ScriptingService] Joint RAnklePitch in chain right_leg has scoped name cogimon::RAnklePitch
-1.718 [ Info   ][ScriptingService] Joint RAnkleRoll in chain right_leg has scoped name cogimon::RAnkleRoll
-1.718 [ Info   ][ScriptingService] Joint RHipLat in chain right_leg has scoped name cogimon::RHipLat
-1.718 [ Info   ][ScriptingService] Joint RHipSag in chain right_leg has scoped name cogimon::RHipSag
-1.718 [ Info   ][ScriptingService] Joint RHipYaw in chain right_leg has scoped name cogimon::RHipYaw
-1.718 [ Info   ][ScriptingService] Joint RKneePitch in chain right_leg has scoped name cogimon::RKneePitch
-1.718 [ Info   ][ScriptingService] JointPositionCtrl activated!
-1.718 [ Info   ][ScriptingService] JointImpedanceCtrl activated!
-1.718 [ Info   ][ScriptingService] JointTorqueCtrl activated!
-1.718 [ Info   ][ScriptingService] Full feedback activated!
-1.718 [ Info   ][ScriptingService] right_leg PIDs:
-1.718 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
-1.718 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
-1.718 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
-1.718 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
-1.718 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
-1.718 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
-1.718 [ Info   ][ScriptingService] Gazebo Joint Controlled inited!
-1.718 [ Info   ][ScriptingService] Initial Position set!
-1.718 [ Info   ][ScriptingService] right_leg impedance:
-1.718 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
-1.718 [ Info   ][ScriptingService] Initial Impedance set!
-1.718 [ Info   ][ScriptingService] Kinematic Chains Initialized!
-1.718 [ Info   ][ScriptingService] Checking Sensors
-1.718 [ Info   ][ScriptingService] Creating Force/Torque Sensor 
-1.718 [ Info   ][ScriptingService] Sensor left_leg of type force_torque specified in joint cogimon::LAnkleRoll is associated to link LFoot
-1.718 [ Info   ][ScriptingService] Creating Force/Torque Sensor 
-1.718 [ Info   ][ScriptingService] Sensor right_leg of type force_torque specified in joint cogimon::RAnkleRoll is associated to link RFoot
-1.719 [ Warning][ScriptingService] Done configuring component
-1.719 [ Info   ][ScriptingService] left_leg home config: [ 0 -0.4 0 0.9 -0.4 0 ]
-1.719 [ Info   ][ScriptingService] Reset Model Configuration has been called!
-1.719 [ Info   ][ScriptingService] left_leg PIDs:
-1.719 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
-1.719 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
-1.719 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
-1.719 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
-1.719 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
-1.719 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
-1.719 [ Info   ][ScriptingService] left_leg impedance:
-1.719 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
-1.719 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
-1.719 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService] right_leg PIDs:
-1.720 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
-1.720 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
-1.720 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService] right_leg impedance:
-1.720 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService] right_leg home config: [ 0 -0.4 0 0.9 -0.4 0 ]
-1.720 [ Info   ][ScriptingService] Reset Model Configuration has been called!
-1.720 [ Info   ][ScriptingService] left_leg PIDs:
-1.720 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
-1.720 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
-1.720 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService] left_leg impedance:
-1.720 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService] right_leg PIDs:
-1.720 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
-1.720 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
-1.720 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
-1.720 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
-1.720 [ Info   ][ScriptingService] right_leg impedance:
-1.720 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
-1.720 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
-1.721 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS ...
-1.756 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS/librobot_interface_orocos_test-gnulinux.so'
-1.756 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='interface_test'
-1.756 [ Info   ][interface_test] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24837 ).
-1.757 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=1, CPU affinity=0, with name='Activity'
-1.757 [ Warning][Thread] Lowering scheduler type to SCHED_OTHER for non-privileged users..
-1.757 [ Warning][Activity] Lowering scheduler type to SCHED_OTHER for non-privileged users..
-1.757 [ Info   ][Activity] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0.01 (PID= 24838 ).
-1.757 [ Info   ][loadComponent] Adding interface_test as new peer:  OK.
-1.758 [ Info   ][ScriptingService] Robot name: cogimon
-1.784 [ Info   ][ScriptingService] Constructing OROCOS implementation of RobotInterface!
-1.784 [ Info   ][ScriptingService] TaskContextPtr found!
-1.784 [ Info   ][ScriptingService] TaskPeerContextPtr found!
-1.784 [ Info   ][ScriptingService] Added left_leg port and data
-1.784 [ Info   ][ScriptingService] Added right_leg port and data
-1.785 [ Info   ][ScriptingService] Added l_leg_ft port and data
-1.785 [ Info   ][ScriptingService] Added r_leg_ft port and data
-1.785 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='TaskBrowser'
-1.785 [ Info   ][TaskBrowser] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 24839 ).
-1.785 [ Info   ][Logger] Entering Task Deployer
-191.510 [ Info   ][Logger] Ignoring deployment shutdown function due to missing peer.
-191.511 [ Info   ][stopComponentsGroup] Stopping group 0
-191.511 [ Info   ][stopComponentsGroup] Stopped cogimon
-191.511 [ Info   ][stopComponentsGroup] Stopped gazebo
-191.511 [ Info   ][stopComponentsGroup] Stopped interface_test
-191.511 [ Info   ][cleanupComponentsGroup] Cleaning up group 0
-191.511 [ Info   ][cleanupComponentsGroup] Cleaned up cogimon
-191.548 [ Info   ][cleanupComponentsGroup] Cleaned up gazebo
-191.548 [ Info   ][cleanupComponentsGroup] Cleaned up interface_test
-191.548 [ Info   ][Logger] Unloading group 0
-191.548 [ Info   ][Logger] Disconnected and destroyed cogimon
-191.680 [ Info   ][Logger] Disconnected and destroyed gazebo
-191.688 [ Info   ][Logger] Disconnected and destroyed interface_test
-191.688 [ Info   ][Logger] Kick-out of group 0 successful.
-191.689 [ Info   ][Logger] Orocos Logging Deactivated.
+0.014 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://rtt-types.
+0.014 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-corba-types' from 'rtt-transport-corba'
+0.029 [ Info   ][TypekitRepository::Import] Loading Typekit rtt-types.
+0.029 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for int
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for int
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for uint
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for uint
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for double
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for double
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for float
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for float
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for char
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for char
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for bool
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for bool
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for void
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for ConnPolicy
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for TaskContext
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for string
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for array
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for array
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for rt_string
+0.030 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-types' from 'rtt-typekit'
+0.030 [ Info   ][Logger] Loading typekit libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/./types ...
+0.030 [ Info   ][Logger] RTT_COMPONENT_PATH was set to: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS . Searching in: /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/home/enrico/advr-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_coman:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joints_gui:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/ros_orocos_joint_trajectory_server:/home/enrico/advr-superbuild/build/install/lib:/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS
+0.030 [ Info   ][Logger] OCL factory set for real-time logging
+0.030 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='Deployer'
+0.030 [ Info   ][Deployer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27179 ).
+0.030 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='GlobalEngine'
+0.030 [ Info   ][GlobalEngine] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27180 ).
+0.031 [ Info   ][Logger] No site file was found. Importing 'ocl' by default.
+0.031 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl ...
+0.032 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaTLSFComponent'
+0.037 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::logging::Log4cxxAppender'
+0.048 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-netcdf-gnulinux.so'
+0.048 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::NetcdfReporting'
+0.050 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-timer-gnulinux.so'
+0.050 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-gnulinux.so'
+0.052 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-common-gnulinux.so'
+0.052 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaComponent'
+0.054 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::HelloWorld'
+0.056 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-logging-gnulinux.so'
+0.056 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/types ...
+0.058 [ Info   ][TypekitRepository::Import] Loading Typekit OCLTypekit.
+0.059 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'OCLTypekit' from 'ocl'
+0.059 [ Info   ][ComponentLoader::import(path_list)] Loading plugin libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/plugins ...
+0.059 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'LuaTLSF' from 'rttlua-tlsf-plugin'
+0.060 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'print' from 'print'
+0.060 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'Lua' from 'rttlua-plugin'
+0.062 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'os' from 'os'
+0.062 [ Info   ][Logger] Loading Service or Plugin scripting in TaskContext Deployer
+0.062 [ Info   ][Logger] Found complete interface of requested service 'scripting'
+0.062 [ Info   ][Logger] Running Script testRobotInterfaceOROCOS.ops ...
+0.064 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/eigen_typekit ...
+0.064 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/eigen_typekit/types ...
+0.071 [ Info   ][TypekitRepository::Import] Loading Typekit Eigen.
+0.071 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'Eigen' from 'eigen_typekit'
+0.072 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://Eigen.
+0.072 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for eigen_matrix
+0.072 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for eigen_vector
+0.072 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'eigen-corba-types' from 'eigen-transport-corba'
+0.073 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://Eigen.
+0.073 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for eigen_matrix
+0.073 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for eigen_vector
+0.073 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'eigen-mqueue-types' from 'eigen-transport-mqueue'
+0.074 [ Info   ][ComponentLoader::import(path_list)] Importing directory /opt/ros/indigo/lib/orocos/gnulinux/eigen_typekit ...
+0.074 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/eigen_typekit/types ...
+0.074 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/kdl_typekit ...
+0.090 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'KDLTypekitTestComponent'
+0.090 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/kdl_typekit/types ...
+0.093 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://KDL.
+0.093 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'kdl-mqueue-types' from 'kdl-transport-mqueue'
+0.096 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://KDL.
+0.096 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'kdl-corba-types' from 'kdl-transport-corba'
+0.197 [ Info   ][TypekitRepository::Import] Loading Typekit KDL.
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Frame
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Frame
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Jacobian
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Jacobian
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.JntArray
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.JntArray
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Rotation
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Rotation
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Twist
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Twist
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Vector
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Vector
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for KDL.Wrench
+0.198 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for KDL.Wrench
+0.199 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'KDL' from 'kdl_typekit'
+0.199 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rst-rt_typekit ...
+0.199 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rst-rt_typekit/types ...
+0.364 [ Info   ][TypekitRepository::Import] Loading Typekit rst-rt.
+0.366 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'rst-rt' from 'rst-rt_typekit'
+0.366 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt_gazebo_embedded ...
+0.484 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'RTTGazeboEmbedded'
+0.486 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'ModelPluginExample'
+0.487 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='gazebo'
+0.487 [ Info   ][gazebo] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27182 ).
+0.487 [ Info   ][loadComponent] Creating gazebo with gazebo embedded !
+0.487 [ Info   ][loadComponent] Adding gazebo as new peer:  OK.
+0.488 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=10, CPU affinity=4294967295, with name='gazebo'
+0.488 [ Warning][Thread] Forcing priority (10) of thread with SCHED_OTHER policy to 0.
+0.488 [ Info   ][gazebo] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27183 ).
+0.489 [ Info   ][ScriptingService] Creating world at /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/empty.world
+1.556 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt-gazebo-robot-sim ...
+1.667 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/rtt-gazebo-robot-sim/librtt-gazebo-robot-sim-gnulinux.so'
+1.667 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='cogimon'
+1.668 [ Info   ][cogimon] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27206 ).
+1.668 [ Info   ][loadComponent] Adding cogimon as new peer:  OK.
+1.668 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=11, CPU affinity=4294967295, with name='cogimon'
+1.668 [ Warning][Thread] Forcing priority (11) of thread with SCHED_OTHER policy to 0.
+1.668 [ Info   ][cogimon] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27207 ).
+1.669 [ Info   ][ScriptingService] URDF path: /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/model.urdf
+1.669 [ Info   ][ScriptingService] SRDF path: /home/enrico/advr-superbuild/robots/cogimon-gazebo-models/iit-cogimon/cogimon.srdf
+1.674 [ Info   ][ScriptingService] chain #0 left_leg
+1.674 [ Info   ][ScriptingService]   LHipLat
+1.674 [ Info   ][ScriptingService]   LHipSag
+1.674 [ Info   ][ScriptingService]   LHipYaw
+1.674 [ Info   ][ScriptingService]   LKneePitch
+1.674 [ Info   ][ScriptingService]   LAnklePitch
+1.674 [ Info   ][ScriptingService]   LAnkleRoll
+1.674 [ Info   ][ScriptingService] chain #1 right_leg
+1.674 [ Info   ][ScriptingService]   RHipLat
+1.674 [ Info   ][ScriptingService]   RHipSag
+1.674 [ Info   ][ScriptingService]   RHipYaw
+1.674 [ Info   ][ScriptingService]   RKneePitch
+1.674 [ Info   ][ScriptingService]   RAnklePitch
+1.674 [ Info   ][ScriptingService]   RAnkleRoll
+1.674 [ Info   ][ScriptingService] Model [cogimon] successfully loaded !
+1.675 [ Info   ][ScriptingService] Model name cogimon
+1.675 [ Info   ][ScriptingService] Model has 12 joints
+1.675 [ Info   ][ScriptingService] Model has 13 links
+1.675 [ Info   ][ScriptingService] Creating Kinematic Chain left_leg
+1.675 [ Info   ][ScriptingService] Joints: 
+1.675 [ Info   ][ScriptingService]     LHipLat
+1.675 [ Info   ][ScriptingService]     LHipSag
+1.675 [ Info   ][ScriptingService]     LHipYaw
+1.675 [ Info   ][ScriptingService]     LKneePitch
+1.675 [ Info   ][ScriptingService]     LAnklePitch
+1.675 [ Info   ][ScriptingService]     LAnkleRoll
+1.675 [ Info   ][ScriptingService] Creating Kinematic Chain right_leg
+1.675 [ Info   ][ScriptingService] Joints: 
+1.675 [ Info   ][ScriptingService]     RHipLat
+1.675 [ Info   ][ScriptingService]     RHipSag
+1.675 [ Info   ][ScriptingService]     RHipYaw
+1.675 [ Info   ][ScriptingService]     RKneePitch
+1.675 [ Info   ][ScriptingService]     RAnklePitch
+1.675 [ Info   ][ScriptingService]     RAnkleRoll
+1.675 [ Info   ][ScriptingService] Kinematic Chains map created!
+1.675 [ Info   ][ScriptingService] Available controllers for left_leg are:
+1.675 [ Info   ][ScriptingService]   JointPositionCtrl
+1.675 [ Info   ][ScriptingService]   JointImpedanceCtrl
+1.675 [ Info   ][ScriptingService]   JointTorqueCtrl
+1.675 [ Info   ][ScriptingService] Joint LAnklePitch in chain left_leg has scoped name cogimon::LAnklePitch
+1.675 [ Info   ][ScriptingService] Joint LAnkleRoll in chain left_leg has scoped name cogimon::LAnkleRoll
+1.675 [ Info   ][ScriptingService] Joint LHipLat in chain left_leg has scoped name cogimon::LHipLat
+1.675 [ Info   ][ScriptingService] Joint LHipSag in chain left_leg has scoped name cogimon::LHipSag
+1.675 [ Info   ][ScriptingService] Joint LHipYaw in chain left_leg has scoped name cogimon::LHipYaw
+1.675 [ Info   ][ScriptingService] Joint LKneePitch in chain left_leg has scoped name cogimon::LKneePitch
+1.675 [ Info   ][ScriptingService] JointPositionCtrl activated!
+1.676 [ Info   ][ScriptingService] JointImpedanceCtrl activated!
+1.676 [ Info   ][ScriptingService] JointTorqueCtrl activated!
+1.676 [ Info   ][ScriptingService] Full feedback activated!
+1.676 [ Info   ][ScriptingService] left_leg PIDs:
+1.676 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
+1.676 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
+1.676 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
+1.676 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
+1.676 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
+1.676 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
+1.676 [ Info   ][ScriptingService] Gazebo Joint Controlled inited!
+1.676 [ Info   ][ScriptingService] Initial Position set!
+1.676 [ Info   ][ScriptingService] left_leg impedance:
+1.676 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
+1.676 [ Info   ][ScriptingService] Initial Impedance set!
+1.676 [ Info   ][ScriptingService] Available controllers for right_leg are:
+1.676 [ Info   ][ScriptingService]   JointPositionCtrl
+1.676 [ Info   ][ScriptingService]   JointImpedanceCtrl
+1.676 [ Info   ][ScriptingService]   JointTorqueCtrl
+1.676 [ Info   ][ScriptingService] Joint RAnklePitch in chain right_leg has scoped name cogimon::RAnklePitch
+1.676 [ Info   ][ScriptingService] Joint RAnkleRoll in chain right_leg has scoped name cogimon::RAnkleRoll
+1.676 [ Info   ][ScriptingService] Joint RHipLat in chain right_leg has scoped name cogimon::RHipLat
+1.676 [ Info   ][ScriptingService] Joint RHipSag in chain right_leg has scoped name cogimon::RHipSag
+1.676 [ Info   ][ScriptingService] Joint RHipYaw in chain right_leg has scoped name cogimon::RHipYaw
+1.676 [ Info   ][ScriptingService] Joint RKneePitch in chain right_leg has scoped name cogimon::RKneePitch
+1.676 [ Info   ][ScriptingService] JointPositionCtrl activated!
+1.676 [ Info   ][ScriptingService] JointImpedanceCtrl activated!
+1.676 [ Info   ][ScriptingService] JointTorqueCtrl activated!
+1.676 [ Info   ][ScriptingService] Full feedback activated!
+1.676 [ Info   ][ScriptingService] right_leg PIDs:
+1.676 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
+1.677 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
+1.677 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
+1.677 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
+1.677 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
+1.677 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
+1.677 [ Info   ][ScriptingService] Gazebo Joint Controlled inited!
+1.677 [ Info   ][ScriptingService] Initial Position set!
+1.677 [ Info   ][ScriptingService] right_leg impedance:
+1.677 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
+1.677 [ Info   ][ScriptingService] Initial Impedance set!
+1.677 [ Info   ][ScriptingService] Kinematic Chains Initialized!
+1.677 [ Info   ][ScriptingService] Checking Sensors
+1.677 [ Info   ][ScriptingService] Creating Force/Torque Sensor 
+1.677 [ Info   ][ScriptingService] Sensor left_leg of type force_torque specified in joint cogimon::LAnkleRoll is associated to link LFoot
+1.677 [ Info   ][ScriptingService] Creating Force/Torque Sensor 
+1.677 [ Info   ][ScriptingService] Sensor right_leg of type force_torque specified in joint cogimon::RAnkleRoll is associated to link RFoot
+1.677 [ Warning][ScriptingService] Done configuring component
+1.678 [ Info   ][ScriptingService] left_leg home config: [ 0 -0.4 0 0.9 -0.4 0 ]
+1.678 [ Info   ][ScriptingService] Reset Model Configuration has been called!
+1.678 [ Info   ][ScriptingService] left_leg PIDs:
+1.678 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
+1.678 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
+1.678 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
+1.678 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
+1.678 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
+1.678 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
+1.678 [ Info   ][ScriptingService] left_leg impedance:
+1.678 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
+1.678 [ Info   ][ScriptingService] right_leg PIDs:
+1.678 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
+1.678 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
+1.678 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
+1.678 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
+1.678 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
+1.678 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
+1.679 [ Info   ][ScriptingService] right_leg impedance:
+1.679 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService] right_leg home config: [ 0 -0.4 0 0.9 -0.4 0 ]
+1.679 [ Info   ][ScriptingService] Reset Model Configuration has been called!
+1.679 [ Info   ][ScriptingService] left_leg PIDs:
+1.679 [ Info   ][ScriptingService]   LHipLat P: 4500 I: 0 D: 10
+1.679 [ Info   ][ScriptingService]   LHipSag P: 7500 I: 2 D: 12
+1.679 [ Info   ][ScriptingService]   LHipYaw P: 4000 I: 0 D: 10
+1.679 [ Info   ][ScriptingService]   LKneePitch P: 3500 I: 0 D: 5
+1.679 [ Info   ][ScriptingService]   LAnklePitch P: 5500 I: 0 D: 7
+1.679 [ Info   ][ScriptingService]   LAnkleRoll P: 2500 I: 0 D: 5
+1.679 [ Info   ][ScriptingService] left_leg impedance:
+1.679 [ Info   ][ScriptingService]   LHipLat stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   LHipSag stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   LHipYaw stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   LKneePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   LAnklePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   LAnkleRoll stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService] right_leg PIDs:
+1.679 [ Info   ][ScriptingService]   RHipLat P: 4500 I: 0 D: 10
+1.679 [ Info   ][ScriptingService]   RHipSag P: 7500 I: 2 D: 12
+1.679 [ Info   ][ScriptingService]   RHipYaw P: 4000 I: 0 D: 10
+1.679 [ Info   ][ScriptingService]   RKneePitch P: 3500 I: 0 D: 5
+1.679 [ Info   ][ScriptingService]   RAnklePitch P: 5500 I: 0 D: 7
+1.679 [ Info   ][ScriptingService]   RAnkleRoll P: 2500 I: 0 D: 5
+1.679 [ Info   ][ScriptingService] right_leg impedance:
+1.679 [ Info   ][ScriptingService]   RHipLat stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RHipSag stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RHipYaw stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RKneePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RAnklePitch stiffness: 300 damping: 30
+1.679 [ Info   ][ScriptingService]   RAnkleRoll stiffness: 300 damping: 30
+1.680 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS ...
+1.719 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/advr-superbuild/build/install/lib/orocos/gnulinux/RobotInterfaceOROCOS/librobot_interface_orocos_test-gnulinux.so'
+1.720 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='interface_test'
+1.720 [ Info   ][interface_test] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27208 ).
+1.720 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=1, CPU affinity=0, with name='Activity'
+1.720 [ Warning][Thread] Lowering scheduler type to SCHED_OTHER for non-privileged users..
+1.720 [ Warning][Activity] Lowering scheduler type to SCHED_OTHER for non-privileged users..
+1.720 [ Info   ][Activity] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0.01 (PID= 27209 ).
+1.720 [ Info   ][loadComponent] Adding interface_test as new peer:  OK.
+1.721 [ Info   ][ScriptingService] Robot name: cogimon
+1.748 [ Info   ][ScriptingService] Constructing OROCOS implementation of RobotInterface!
+1.748 [ Info   ][ScriptingService] Robot has 12 dofs
+1.748 [ Info   ][ScriptingService] TaskContextPtr found!
+1.748 [ Info   ][ScriptingService] TaskPeerContextPtr found!
+1.748 [ Info   ][ScriptingService] Added left_leg port and data
+1.749 [ Info   ][ScriptingService] Added right_leg port and data
+1.749 [ Info   ][ScriptingService] Added l_leg_ft port and data
+1.749 [ Info   ][ScriptingService] Added r_leg_ft port and data
+1.749 [ Warning][ScriptingService] ROBOT LOADED IN ROBOT INTERFACE OROCOS
+1.749 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='TaskBrowser'
+1.750 [ Info   ][TaskBrowser] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 27210 ).
+1.750 [ Info   ][Logger] Entering Task Deployer
+26.424 [ Info   ][Logger] Ignoring deployment shutdown function due to missing peer.
+26.424 [ Info   ][stopComponentsGroup] Stopping group 0
+26.424 [ Info   ][stopComponentsGroup] Stopped cogimon
+26.424 [ Info   ][stopComponentsGroup] Stopped gazebo
+26.424 [ Info   ][stopComponentsGroup] Stopped interface_test
+26.424 [ Info   ][cleanupComponentsGroup] Cleaning up group 0
+26.424 [ Info   ][cleanupComponentsGroup] Cleaned up cogimon
+26.446 [ Info   ][cleanupComponentsGroup] Cleaned up gazebo
+26.447 [ Info   ][cleanupComponentsGroup] Cleaned up interface_test
+26.447 [ Info   ][Logger] Unloading group 0
+26.447 [ Info   ][Logger] Disconnected and destroyed cogimon
+26.578 [ Info   ][Logger] Disconnected and destroyed gazebo
+26.581 [ Info   ][Logger] Disconnected and destroyed interface_test
+26.581 [ Info   ][Logger] Kick-out of group 0 successful.
+26.581 [ Info   ][Logger] Orocos Logging Deactivated.
