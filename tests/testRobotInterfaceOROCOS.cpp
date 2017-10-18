@@ -55,23 +55,8 @@ public:
 
     bool attachToRobot(const std::string &robot_name, const std::string &config_path)
     {
-        RTT::log(RTT::Info)<<"Robot name: "<<robot_name<<RTT::endlog();
-
-        std::shared_ptr<RTT::TaskContext> task_ptr(this->getPeer(robot_name));
-        if(!task_ptr){
-            RTT::log(RTT::Error)<<"Can not getPeer("<<robot_name<<")"<<RTT::endlog();
-            return false;}
-
-        std::shared_ptr<std::map<std::string, boost::any >> anymap(new std::map<std::string, boost::any >);
-        (*anymap)["TaskContextPtr"] = std::shared_ptr<RTT::TaskContext>(this);
-        (*anymap)["TaskPeerContextPtr"] = task_ptr;
-
-
-        _robot = XBot::RobotInterface::getRobot(config_path, anymap);
-        if(_robot)
-            return true;
-        RTT::log(RTT::Error)<<"CAN NOT LOAD ROBOT INTERFACE OROCOS"<<RTT::endlog();
-        return false;
+        XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, config_path,
+            _robot, std::shared_ptr<RTT::TaskContext>(this));
 
     }
 

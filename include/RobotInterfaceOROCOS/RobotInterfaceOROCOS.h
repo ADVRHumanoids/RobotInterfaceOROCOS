@@ -53,6 +53,9 @@ public:
 
     virtual bool isRunning() const;
 
+    static bool attachToRobot(const std::string &robot_name, const std::string &config_path,
+                              XBot::RobotInterface::Ptr _robot, std::shared_ptr<RTT::TaskContext> task);
+
 protected:
 
     virtual bool init_robot(const std::string &path_to_cfg, AnyMapConstPtr any_map);
