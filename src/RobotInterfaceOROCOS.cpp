@@ -209,11 +209,52 @@ bool XBot::RobotInterfaceOROCOS::isRunning() const
 }
 
 bool XBot::RobotInterfaceOROCOS::move_internal(){return false;}
-bool XBot::RobotInterfaceOROCOS::read_sensors(){return false;}
-bool XBot::RobotInterfaceOROCOS::move_hands(){return false;}
-bool XBot::RobotInterfaceOROCOS::sense_hands(){ return false;}
+
+bool XBot::RobotInterfaceOROCOS::read_sensors()
+{
+    bool success = true;
+
+    //For now just FT sensors
+    std::map<std::string, rstrt::dynamics::Wrench>::iterator it2;
+    for(it2 = _frames_wrenches_map.begin(); it2 != _frames_wrenches_map.end(); it2++)
+    {
+        RTT::FlowStatus fs = _frames_ports_map.at(it2->first)->read(
+                    _frames_wrenches_map.at(it2->first));
+
+        auto it = getForceTorqueInternal().find(it2->first);
+
+        if( it != getForceTorqueInternal().end() )
+            _ftptr = it->second;
+        if(!_ftptr){
+            RTT::log(RTT::Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it2->first << " is present in given URDF/SRDF! Check that FTmsg.header.frame_id is the parent link of the sensor name in URDF! Also check that FT fixed joints are defined inside the force_torque_sensors SRDF group" << RTT::endlog();
+            success = false;
+        }
+        else{
+            _tmp_vector6.setZero();
+            _tmp_vector6<<_frames_wrenches_map.at(it2->first).forces.cast <double> (), _frames_wrenches_map.at(it2->first).torques.cast <double> ();
+            getForceTorqueInternal().at(_ftptr->getSensorName())->setWrench(
+                _tmp_vector6,getTime());
+        }
+    }
+
+    return success;
+}
+
+bool XBot::RobotInterfaceOROCOS::move_hands()
+{
+    RTT::log(RTT::Error)<<"move_hands() is not yet implemented!"<<RTT::endlog();
+    return false;
+}
+
+bool XBot::RobotInterfaceOROCOS::sense_hands()
+{
+    RTT::log(RTT::Error)<<"sense_hands() is not yet implemented!"<<RTT::endlog();
+    return false;
+}
+
 bool XBot::RobotInterfaceOROCOS::set_control_mode_internal ( int joint_id, const ControlMode& control_mode )
 {
+    RTT::log(RTT::Error)<<"set_control_mode_internal(...) is not yet implemented!"<<RTT::endlog();
     return false;
 }
 

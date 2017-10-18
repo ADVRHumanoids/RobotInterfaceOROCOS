@@ -84,6 +84,9 @@ private:
     Eigen::VectorXd _q;
     Eigen::VectorXd _qdot;
     Eigen::VectorXd _tau;
+
+    ForceTorqueSensor::ConstPtr _ftptr;
+    Eigen::Vector6d _tmp_vector6;
 };
 
 }

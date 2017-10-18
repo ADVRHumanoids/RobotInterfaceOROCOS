@@ -66,6 +66,14 @@ public:
         std::cout<<"qdot: "<<qdot<<std::endl;
         std::cout<<"tau: "<<tau<<std::endl;
 
+        std::map< std::string, XBot::ForceTorqueSensor::ConstPtr > ftmap = _robot->getForceTorque();
+        std::map< std::string, XBot::ForceTorqueSensor::ConstPtr >::iterator it;
+        for(it = ftmap.begin(); it != ftmap.end(); it++){
+            Eigen::Vector6d w;
+            it->second->getWrench(w);
+            std::cout<<it->first<<": "<<w<<std::endl;
+        }
+
         return true;
     }
 
