@@ -63,6 +63,8 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
     _qdot.setZero(this->getJointNum());
     _tau.setZero(this->getJointNum());
 
+    _q_ref.setZero(this->getJointNum());
+
     if(!any_map){
         RTT::log(RTT::Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << RTT::endlog();
         return false;
@@ -208,7 +210,24 @@ bool XBot::RobotInterfaceOROCOS::isRunning() const
     return _task_ptr->isRunning();
 }
 
-bool XBot::RobotInterfaceOROCOS::move_internal(){return false;}
+bool XBot::RobotInterfaceOROCOS::move_internal()
+{
+    // For now position ctrl
+    this->getPositionReference(_q_ref);
+
+    std::map<std::string, std::vector<std::string> >::iterator it;
+    for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
+    {
+        for(unsigned int i = 0; i < it->second.size(); ++i)
+            _kinematic_chains_desired_joint_state_map.at(it->first).angles[i] =
+                    _q_ref[this->getDofIndex(it->second.at(i))];
+
+        _kinematic_chains_output_ports.at(it->first)->
+                write(_kinematic_chains_desired_joint_state_map.at(it->first));
+    }
+
+    return true;
+}
 
 bool XBot::RobotInterfaceOROCOS::read_sensors()
 {
@@ -242,19 +261,19 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
 
 bool XBot::RobotInterfaceOROCOS::move_hands()
 {
-    RTT::log(RTT::Error)<<"move_hands() is not yet implemented!"<<RTT::endlog();
+    RTT::log(RTT::Debug)<<"move_hands() is not yet implemented!"<<RTT::endlog();
     return false;
 }
 
 bool XBot::RobotInterfaceOROCOS::sense_hands()
 {
-    RTT::log(RTT::Error)<<"sense_hands() is not yet implemented!"<<RTT::endlog();
+    RTT::log(RTT::Debug)<<"sense_hands() is not yet implemented!"<<RTT::endlog();
     return false;
 }
 
 bool XBot::RobotInterfaceOROCOS::set_control_mode_internal ( int joint_id, const ControlMode& control_mode )
 {
-    RTT::log(RTT::Error)<<"set_control_mode_internal(...) is not yet implemented!"<<RTT::endlog();
+    RTT::log(RTT::Debug)<<"set_control_mode_internal(...) is not yet implemented!"<<RTT::endlog();
     return false;
 }
 

@@ -33,6 +33,13 @@ public:
                     this, RTT::ClientThread);
         this->addOperation("sense", &robot_interface_orocos_test::sense,
                     this, RTT::ClientThread);
+
+        this->addOperation("startPosTrj", &robot_interface_orocos_test::startPosTrj,
+                    this, RTT::ClientThread);
+        start_position_trj = false;
+
+        this->addOperation("stopTrj", &robot_interface_orocos_test::stopTrj,
+                    this, RTT::ClientThread);
     }
 
     bool configureHook()
@@ -42,17 +49,46 @@ public:
 
     bool startHook()
     {
-        return false;
+        return true;
     }
 
     void updateHook()
     {
+        if(start_position_trj)
+        {
+            double amplitude = 10.*M_PI/180.;
+            double period = 0.1;
 
+            sin_traj(q, amplitude, t, period, q_ref);
+
+            _robot->setPositionReference(q_ref);
+            _robot->move();
+
+            t += this->getPeriod();
+        }
     }
 
     void stopHook()
     {
 
+    }
+
+    bool stopTrj()
+    {
+        t = 0.0;
+        start_position_trj = false;
+
+        return true;
+    }
+
+    bool startPosTrj()
+    {
+        sense();
+
+        t = 0.0;
+        start_position_trj = true;
+
+        return true;
     }
 
     bool sense()
@@ -97,12 +133,30 @@ public:
         return a;
     }
 
+    double sin_traj(double q0, double amplitude, double t, double period)
+    {
+        return q0 + amplitude*std::sin(t/(period*M_PI));
+    }
+
+    void sin_traj(const Eigen::VectorXd& q0, double amplitude, double t, double period,
+                  Eigen::VectorXd& qref)
+    {
+        qref.setZero(q0.size());
+        for(unsigned int i = 0; i < q0.size(); ++i)
+            qref[i] = sin_traj(q0[i], amplitude, t, period);
+    }
+
 
 private:
     XBot::RobotInterface::Ptr _robot;
     Eigen::VectorXd q;
     Eigen::VectorXd qdot;
     Eigen::VectorXd tau;
+
+    Eigen::VectorXd q_ref;
+
+    double t;
+    bool start_position_trj;
 };
 
 ORO_CREATE_COMPONENT_LIBRARY()ORO_LIST_COMPONENT_TYPE(robot_interface_orocos_test)
