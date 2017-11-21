@@ -30,7 +30,7 @@
 #include <rst-rt/dynamics/Wrench.hpp>
 #include <std_msgs/Float64.h>
 
-#include <SharedLibraryClass.h>
+#include <XBotInterface/SoLib.h>
 
 #include <rtt/os/TimeService.hpp>
 #include <rtt/Time.hpp>

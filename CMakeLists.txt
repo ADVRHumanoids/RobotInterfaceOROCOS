@@ -27,13 +27,7 @@ endif(COMMAND cmake_policy)
 include(ExternalProject)
 
 project(RobotInterfaceOROCOS)
-find_package(orocos_kdl REQUIRED)
 
-find_package(RST-RT REQUIRED)
-message(STATUS "RST-RT version: ${RST-RT_VERSION}")
-include_directories(BEFORE SYSTEM ${RST-RT_INCLUDE_DIRS})
-add_definitions(${RST-RT_CFLAGS})
-link_directories(${RST-RT_LIBRARY_DIR} ${RST-RT_LIBRARY_DIRS})
 
 # C++ 11
 include(CheckCXXCompilerFlag)
@@ -54,11 +48,24 @@ if (NOT OROCOS-RTT_FOUND)
   message (FATAL_ERROR "\nCould not find Orocos. Please use the shell command\n 'source orocos_toolchain/env.sh' and then run cmake again.")
 endif()
 
+find_package(orocos-ocl REQUIRED)
+find_package(orocos_kdl REQUIRED)
+
+
+find_package(RST-RT REQUIRED)
+message(STATUS "RST-RT version: ${RST-RT_VERSION}")
+include_directories(BEFORE SYSTEM ${RST-RT_INCLUDE_DIRS})
+add_definitions(${RST-RT_CFLAGS})
+link_directories(${RST-RT_LIBRARY_DIR} ${RST-RT_LIBRARY_DIRS})
+
 include_directories(${RTT-CORE-EXTENSIONS_INCLUDE_DIRS})
 link_directories(${RTT-CORE-EXTENSIONS_LIBRARY_DIRS})
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
 
+ MESSAGE("sssss \"${USE_OROCOS_INCLUDE_DIRS}\"")
 
+  MESSAGE("ssssssssss \"${RTT-CORE-EXTENSIONS_INCLUDE_DIRS}\"")
+  
 include_directories(include 
                     ${XBotInterface_INCLUDE_DIRS}
                     ${EIGEN3_INCLUDE_DIRS}

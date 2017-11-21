@@ -21,7 +21,7 @@
 #include <rtt/Logger.hpp>
 
 
-SHLIBPP_DEFINE_SHARED_SUBCLASS(robot_interface_orocos, XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
+REGISTER_SO_LIB_(XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
 
 using namespace rstrt::dynamics;
 using namespace rstrt::kinematics;
@@ -43,7 +43,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, co
     (*anymap)["TaskPeerContextPtr"] = task_ptr;
 
 
-    _robot = XBot::RobotInterface::getRobot(config_path, anymap);
+    _robot = XBot::RobotInterface::getRobot(config_path,"", anymap);
     if(_robot)
     {
         RTT::log(RTT::Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<RTT::endlog();
