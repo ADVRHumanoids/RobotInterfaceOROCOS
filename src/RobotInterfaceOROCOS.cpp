@@ -43,7 +43,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, co
     (*anymap)["TaskPeerContextPtr"] = task_ptr;
 
 
-    _robot = XBot::RobotInterface::getRobot(config_path,"", anymap);
+    _robot = XBot::RobotInterface::getRobot(config_path,robot_name, anymap);
     if(_robot)
     {
         RTT::log(RTT::Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<RTT::endlog();
