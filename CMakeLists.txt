@@ -53,7 +53,6 @@ find_package(orocos_kdl REQUIRED)
 
 
 find_package(RST-RT REQUIRED)
-message(STATUS "RST-RT version: ${RST-RT_VERSION}")
 include_directories(BEFORE SYSTEM ${RST-RT_INCLUDE_DIRS})
 add_definitions(${RST-RT_CFLAGS})
 link_directories(${RST-RT_LIBRARY_DIR} ${RST-RT_LIBRARY_DIRS})
@@ -61,10 +60,6 @@ link_directories(${RST-RT_LIBRARY_DIR} ${RST-RT_LIBRARY_DIRS})
 include_directories(${RTT-CORE-EXTENSIONS_INCLUDE_DIRS})
 link_directories(${RTT-CORE-EXTENSIONS_LIBRARY_DIRS})
 include(${OROCOS-RTT_USE_FILE_PATH}/UseOROCOS-RTT.cmake)
-
- MESSAGE("sssss \"${USE_OROCOS_INCLUDE_DIRS}\"")
-
-  MESSAGE("ssssssssss \"${RTT-CORE-EXTENSIONS_INCLUDE_DIRS}\"")
   
 include_directories(include 
                     ${XBotInterface_INCLUDE_DIRS}
