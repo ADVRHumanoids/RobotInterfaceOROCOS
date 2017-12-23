@@ -23,22 +23,25 @@
 
 REGISTER_SO_LIB_(XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
 
+#define LOG(x) RTT::log(x)
+#define ENDLOG() RTT::endlog()
+
 using namespace rstrt::dynamics;
 using namespace rstrt::kinematics;
 using namespace rstrt::robot;
 
-bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, const std::string &config_path,
-                                         XBot::RobotInterface::Ptr& _robot,
-                                         std::shared_ptr<RTT::TaskContext> task)
+bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name, const string &config_path,
+                                         RobotInterface::Ptr& _robot,
+                                         shared_ptr<TaskContext> task)
 {
-    RTT::log(RTT::Info)<<"Robot name: "<<robot_name<<RTT::endlog();
+    LOG(Info)<<"Robot name: "<<robot_name<<ENDLOG();
 
-    std::shared_ptr<RTT::TaskContext> task_ptr(task->getPeer(robot_name));
+    shared_ptr<TaskContext> task_ptr(task->getPeer(robot_name));
     if(!task_ptr){
-        RTT::log(RTT::Error)<<"Can not getPeer("<<robot_name<<")"<<RTT::endlog();
+        LOG(Error)<<"Can not getPeer("<<robot_name<<")"<<ENDLOG();
         return false;}
 
-    std::shared_ptr<std::map<std::string, boost::any >> anymap(new std::map<std::string, boost::any >);
+    shared_ptr<map<string, boost::any >> anymap(new map<string, boost::any >);
     (*anymap)["TaskContextPtr"] = task;
     (*anymap)["TaskPeerContextPtr"] = task_ptr;
 
@@ -46,18 +49,18 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const std::string &robot_name, co
     _robot = XBot::RobotInterface::getRobot(config_path,robot_name, anymap);
     if(_robot)
     {
-        RTT::log(RTT::Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<RTT::endlog();
+        LOG(Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<ENDLOG();
         return true;
     }
-    RTT::log(RTT::Error)<<"CAN NOT LOAD ROBOT INTERFACE OROCOS"<<RTT::endlog();
+    LOG(Error)<<"CAN NOT LOAD ROBOT INTERFACE OROCOS"<<ENDLOG();
     return false;
 
 }
 
-bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyMapConstPtr any_map)
+bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapConstPtr any_map)
 {
-    RTT::log(RTT::Info)<<"Constructing OROCOS implementation of RobotInterface!"<<RTT::endlog();
-    RTT::log(RTT::Info)<<"Robot has "<<this->getJointNum()<<" dofs"<<RTT::endlog();
+    LOG(Info)<<"Constructing OROCOS implementation of RobotInterface!"<<ENDLOG();
+    LOG(Info)<<"Robot has "<<this->getJointNum()<<" dofs"<<ENDLOG();
 
     _q.setZero(this->getJointNum());
     _qdot.setZero(this->getJointNum());
@@ -66,47 +69,47 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
     _q_ref.setZero(this->getJointNum());
 
     if(!any_map){
-        RTT::log(RTT::Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << RTT::endlog();
+        LOG(Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << ENDLOG();
         return false;
     }
 
     if( any_map->count("TaskContextPtr") ){
         try{
-            _task_ptr = boost::any_cast<std::shared_ptr<RTT::TaskContext> >(any_map->at("TaskContextPtr"));
-            RTT::log(RTT::Info) << "TaskContextPtr found!" << RTT::endlog();
+            _task_ptr = boost::any_cast<shared_ptr<TaskContext> >(any_map->at("TaskContextPtr"));
+            LOG(Info) << "TaskContextPtr found!" << ENDLOG();
         }
         catch(...){
-            RTT::log(RTT::Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a std::shared_ptr<RTT::TaskContext>." << RTT::endlog();
+            LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
             return false;
         }
     }
 
     if( any_map->count("TaskPeerContextPtr") ){
         try{
-            _task_peer_ptr = boost::any_cast<std::shared_ptr<RTT::TaskContext> >(any_map->at("TaskPeerContextPtr"));
-            RTT::log(RTT::Info) << "TaskPeerContextPtr found!" << RTT::endlog();
+            _task_peer_ptr = boost::any_cast<shared_ptr<TaskContext> >(any_map->at("TaskPeerContextPtr"));
+            LOG(Info) << "TaskPeerContextPtr found!" << ENDLOG();
         }
         catch(...){
-            RTT::log(RTT::Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskPeerContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a std::shared_ptr<RTT::TaskContext>." << RTT::endlog();
+            LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskPeerContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
             return false;
         }
     }
 
     //FIRST KINEMATICH CHAINS
-    RTT::OperationCaller<std::map<std::string, std::vector<std::string> >(void) > getKinematicChainsAndJoints
+    OperationCaller<map<KinematicChainName, JointNames >(void) > getKinematicChainsAndJoints
             = _task_peer_ptr->getOperation("getKinematicChainsAndJoints");
 
     _map_kin_chains_joints = getKinematicChainsAndJoints();
 
-    std::map<std::string, std::vector<std::string> >::iterator it;
+    map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
-        std::string kin_chain_name = it->first;
-        std::vector<std::string> joint_names = it->second;
+        KinematicChainName kin_chain_name = it->first;
+        JointNames joint_names = it->second;
 
         //1) Feedback from joints
         _kinematic_chains_feedback_ports[kin_chain_name] =
-            boost::shared_ptr<RTT::InputPort<JointState> >(new RTT::InputPort<JointState>(
+            boost::shared_ptr<InputPort<JointState> >(new InputPort<JointState>(
                             kin_chain_name+"_"+"JointFeedback"));
 
         _task_ptr->addPort(*(_kinematic_chains_feedback_ports.at(kin_chain_name))).
@@ -117,12 +120,12 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
 
         JointState tmp(joint_names.size());
         _kinematic_chains_joint_state_map[kin_chain_name] = tmp;
-        RTT::log(RTT::Info)<<"Added "<<kin_chain_name<<" port and data"<<RTT::endlog();
+        LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
 
 
         //2) Position Ctrl
         _kinematic_chains_output_ports[kin_chain_name] =
-                boost::shared_ptr<RTT::OutputPort<JointAngles> >(new RTT::OutputPort<JointAngles>(
+                boost::shared_ptr<OutputPort<JointAngles> >(new OutputPort<JointAngles>(
                                 kin_chain_name+"_"+"JointPositionCtrl"));
         _task_ptr->addPort(*(_kinematic_chains_output_ports.at(kin_chain_name))).
                 doc(kin_chain_name+"_"+"JointPositionCtrl port");
@@ -139,13 +142,13 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
     }
 
     //SECOND FT SENSORS
-    RTT::OperationCaller<std::vector<std::string> (void) > getForceTorqueSensorsFrames
+    OperationCaller<vector<string> (void) > getForceTorqueSensorsFrames
         = _task_peer_ptr->getOperation("getForceTorqueSensorsFrames");
-    std::vector<std::string> ft_sensors_frames = getForceTorqueSensorsFrames();
+    vector<string> ft_sensors_frames = getForceTorqueSensorsFrames();
     for(unsigned int i = 0; i < ft_sensors_frames.size(); ++i)
     {
         _frames_ports_map[ft_sensors_frames[i]] =
-                boost::shared_ptr<RTT::InputPort<Wrench> >(new RTT::InputPort<Wrench>(
+                boost::shared_ptr<InputPort<Wrench> >(new InputPort<Wrench>(
                         ft_sensors_frames[i]+"_SensorFeedback"));
         _task_ptr->addPort(*(_frames_ports_map.at(ft_sensors_frames[i]))).
                 doc(ft_sensors_frames[i]+"_SensorFeedback port");
@@ -156,7 +159,7 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
         Wrench tmp;
         _frames_wrenches_map[ft_sensors_frames[i]] = tmp;
 
-        RTT::log(RTT::Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<RTT::endlog();
+        LOG(Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<ENDLOG();
     }
 
     return true;
@@ -166,10 +169,10 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const std::string &path_to_cfg, AnyM
 
 bool XBot::RobotInterfaceOROCOS::sense_internal()
 {
-    std::map<std::string, std::vector<std::string> >::iterator it;
+    map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
-        RTT::FlowStatus fs = _kinematic_chains_feedback_ports.at(it->first)->read(
+        FlowStatus fs = _kinematic_chains_feedback_ports.at(it->first)->read(
                     _kinematic_chains_joint_state_map.at(it->first));
 
         for(unsigned int i = 0; i < it->second.size(); ++i)
@@ -202,7 +205,7 @@ bool XBot::RobotInterfaceOROCOS::sense_internal()
 
 double XBot::RobotInterfaceOROCOS::getTime() const
 {
-    return RTT::nsecs_to_Seconds(this->getNSecs());
+    return nsecs_to_Seconds(this->getNSecs());
 }
 
 bool XBot::RobotInterfaceOROCOS::isRunning() const
@@ -215,7 +218,7 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
     // For now position ctrl
     this->getPositionReference(_q_ref);
 
-    std::map<std::string, std::vector<std::string> >::iterator it;
+    map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
         for(unsigned int i = 0; i < it->second.size(); ++i)
@@ -234,10 +237,10 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
     bool success = true;
 
     //For now just FT sensors
-    std::map<std::string, rstrt::dynamics::Wrench>::iterator it2;
+    map<string, rstrt::dynamics::Wrench>::iterator it2;
     for(it2 = _frames_wrenches_map.begin(); it2 != _frames_wrenches_map.end(); it2++)
     {
-        RTT::FlowStatus fs = _frames_ports_map.at(it2->first)->read(
+        FlowStatus fs = _frames_ports_map.at(it2->first)->read(
                     _frames_wrenches_map.at(it2->first));
 
         auto it = getForceTorqueInternal().find(it2->first);
@@ -245,7 +248,7 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
         if( it != getForceTorqueInternal().end() )
             _ftptr = it->second;
         if(!_ftptr){
-            RTT::log(RTT::Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it2->first << " is present in given URDF/SRDF! Check that FTmsg.header.frame_id is the parent link of the sensor name in URDF! Also check that FT fixed joints are defined inside the force_torque_sensors SRDF group" << RTT::endlog();
+            LOG(Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it2->first << " is present in given URDF/SRDF! Check that FTmsg.header.frame_id is the parent link of the sensor name in URDF! Also check that FT fixed joints are defined inside the force_torque_sensors SRDF group" << ENDLOG();
             success = false;
         }
         else{
@@ -261,19 +264,19 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
 
 bool XBot::RobotInterfaceOROCOS::move_hands()
 {
-    RTT::log(RTT::Debug)<<"move_hands() is not yet implemented!"<<RTT::endlog();
+    LOG(Debug)<<"move_hands() is not yet implemented!"<<ENDLOG();
     return false;
 }
 
 bool XBot::RobotInterfaceOROCOS::sense_hands()
 {
-    RTT::log(RTT::Debug)<<"sense_hands() is not yet implemented!"<<RTT::endlog();
+    LOG(Debug)<<"sense_hands() is not yet implemented!"<<ENDLOG();
     return false;
 }
 
 bool XBot::RobotInterfaceOROCOS::set_control_mode_internal ( int joint_id, const ControlMode& control_mode )
 {
-    RTT::log(RTT::Debug)<<"set_control_mode_internal(...) is not yet implemented!"<<RTT::endlog();
+    LOG(Debug)<<"set_control_mode_internal(...) is not yet implemented!"<<ENDLOG();
     return false;
 }
 

@@ -35,15 +35,23 @@
 #include <rtt/os/TimeService.hpp>
 #include <rtt/Time.hpp>
 
+using namespace std;
+using namespace RTT;
+using namespace Eigen;
+using namespace rstrt;
+
 namespace XBot
 {
 
-class RobotInterfaceOROCOS : public RobotInterface, RTT::os::TimeService
+class RobotInterfaceOROCOS : public RobotInterface, os::TimeService
 {
 
     friend RobotInterface;
 
 public:
+    typedef string KinematicChainName;
+    typedef string JointName;
+    typedef vector<string> JointNames;
 
     RobotInterfaceOROCOS() {}
 
@@ -53,12 +61,12 @@ public:
 
     virtual bool isRunning() const;
 
-    static bool attachToRobot(const std::string &robot_name, const std::string &config_path,
-                              XBot::RobotInterface::Ptr& _robot, std::shared_ptr<RTT::TaskContext> task);
+    static bool attachToRobot(const string &robot_name, const string &config_path,
+                              RobotInterface::Ptr& _robot, shared_ptr<TaskContext> task);
 
 protected:
 
-    virtual bool init_robot(const std::string &path_to_cfg, AnyMapConstPtr any_map);
+    virtual bool init_robot(const string &path_to_cfg, AnyMapConstPtr any_map);
     virtual bool move_internal();
     virtual bool sense_internal();
     virtual bool read_sensors();
@@ -66,30 +74,30 @@ protected:
     virtual bool sense_hands();
 
 private:
-    std::shared_ptr<RTT::TaskContext> _task_ptr;
-    std::shared_ptr<RTT::TaskContext> _task_peer_ptr;
+    shared_ptr<TaskContext> _task_ptr;
+    shared_ptr<TaskContext> _task_peer_ptr;
 
-    std::map<std::string, std::vector<std::string> > _map_kin_chains_joints;
+    map<KinematicChainName, JointNames > _map_kin_chains_joints;
 
-    std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::robot::JointState> > > _kinematic_chains_feedback_ports;
-    std::map<std::string, boost::shared_ptr<RTT::OutputPort<rstrt::kinematics::JointAngles> > > _kinematic_chains_output_ports;
-    std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::dynamics::Wrench> > > _frames_ports_map;
+    map<KinematicChainName, boost::shared_ptr<InputPort<robot::JointState> > > _kinematic_chains_feedback_ports;
+    map<KinematicChainName, boost::shared_ptr<OutputPort<kinematics::JointAngles> > > _kinematic_chains_output_ports;
+    map<string, boost::shared_ptr<InputPort<dynamics::Wrench> > > _frames_ports_map;
 
-    std::map<std::string, rstrt::robot::JointState> _kinematic_chains_joint_state_map;
-    std::map<std::string, rstrt::kinematics::JointAngles> _kinematic_chains_desired_joint_state_map;
-    std::map<std::string, rstrt::dynamics::Wrench> _frames_wrenches_map;
+    map<KinematicChainName, robot::JointState> _kinematic_chains_joint_state_map;
+    map<KinematicChainName, kinematics::JointAngles> _kinematic_chains_desired_joint_state_map;
+    map<string, dynamics::Wrench> _frames_wrenches_map;
 
 
     //For now these variable are motor side AND link side
-    Eigen::VectorXd _q;
-    Eigen::VectorXd _qdot;
-    Eigen::VectorXd _tau;
+    VectorXd _q;
+    VectorXd _qdot;
+    VectorXd _tau;
 
-    Eigen::VectorXd _q_ref;
+    VectorXd _q_ref;
 
 
     ForceTorqueSensor::ConstPtr _ftptr;
-    Eigen::Vector6d _tmp_vector6;
+    Vector6d _tmp_vector6;
 };
 
 }
