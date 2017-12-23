@@ -59,20 +59,20 @@ public:
 
     Sensor(const string& feedback_name,
            const string& kinematic_chain_name,
+           shared_ptr<TaskContext> task_ptr,
+           shared_ptr<TaskContext> task_peer)
+    {
+        init(feedback_name, kinematic_chain_name, task_ptr, task_peer);
+    }
+
+    Sensor(const string& feedback_name,
+           const string& kinematic_chain_name,
            const int size,
            shared_ptr<TaskContext> task_ptr,
            shared_ptr<TaskContext> task_peer):
            feedback(size)
     {
-        port.reset(new InputPort<T>(kinematic_chain_name + feedback_name));
-        task_ptr->addPort(port->doc(kinematic_chain_name+"_"+feedback_name + " port"));
-        if(port->connectTo(task_peer->ports()->getPort(kinematic_chain_name+"_"+feedback_name)))
-            LOG(Info)<<"Connected to port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
-        else
-        {
-            LOG(Error)<<"Can not connect port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
-            throw std::runtime_error("Error during port connect");
-        }
+        init(feedback_name, kinematic_chain_name, task_ptr, task_peer);
     }
 
     ~Sensor(){
@@ -86,6 +86,23 @@ public:
 
     boost::shared_ptr<InputPort<T> > port;
     T feedback;
+
+private:
+    void init(const string& feedback_name,
+              const string& kinematic_chain_name,
+              shared_ptr<TaskContext> task_ptr,
+              shared_ptr<TaskContext> task_peer)
+    {
+        port.reset(new InputPort<T>(kinematic_chain_name + feedback_name));
+        task_ptr->addPort(port->doc(kinematic_chain_name+"_"+feedback_name + " port"));
+        if(port->connectTo(task_peer->ports()->getPort(kinematic_chain_name+"_"+feedback_name)))
+            LOG(Info)<<"Connected to port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
+        else
+        {
+            LOG(Error)<<"Can not connect port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
+            throw std::runtime_error("Error during port connect");
+        }
+    }
 };
 
 template <class T> class JointCtrl {
@@ -140,14 +157,13 @@ public:
     typedef JointCtrl<kinematics::JointAngles> JointPositionController;
     typedef JointCtrl<dynamics::JointTorques> JointTorqueController;
     typedef Sensor<robot::JointState> JointFeedback;
+    typedef Sensor<dynamics::Wrench> ForceTorqueFeedback;
 
     typedef string KinematicChainName;
     typedef string JointName;
     typedef vector<string> JointNames;
     typedef string ForceTorqueFrame;
 
-    typedef InputPort<dynamics::Wrench> WrenchIPort;
-    typedef boost::shared_ptr<WrenchIPort> WrenchIPort_Ptr;
 
     RobotInterfaceOROCOS() {}
 
@@ -179,11 +195,7 @@ private:
     map<KinematicChainName, JointTorqueController::Ptr> _torque_ctrl;
 
     map<KinematicChainName, JointFeedback::Ptr> _joint_feedback;
-
-    map<ForceTorqueFrame, WrenchIPort_Ptr > _frames_ports_map;
-
-    map<ForceTorqueFrame, dynamics::Wrench> _frames_wrenches_map;
-
+    map<ForceTorqueFrame, ForceTorqueFeedback::Ptr> _ft_feedback;
 
     //For now these variable are motor side AND link side
     VectorXd _q;
@@ -199,8 +211,6 @@ private:
     ForceTorqueSensor::ConstPtr _ftptr;
     Vector6d _tmp_vector6;
 
-    std::string _control_mode;
-    OperationCaller<std::string(std::string) > _getControlMode;
 };
 
 }

@@ -108,23 +108,25 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
         JointNames joint_names = it->second;
 
         //1) Feedback from joints
-        _joint_feedback[kin_chain_name] = JointFeedback::Ptr(
+        try{_joint_feedback[kin_chain_name] = JointFeedback::Ptr(
                 new JointFeedback("JointFeedback", kin_chain_name, joint_names.size(),
                                   _task_ptr, _task_peer_ptr));
+        }catch(...){return false;}
 
         //2) Position Ctrl
-        _position_ctrl[kin_chain_name] = JointPositionController::Ptr(
+        try{_position_ctrl[kin_chain_name] = JointPositionController::Ptr(
             new JointPositionController(ControlModes::JointPositionCtrl,kin_chain_name,
                                         joint_names.size(), _task_ptr, _task_peer_ptr));
-
+        }catch(...){return false;}
 
         //3) Impedance Ctrl
         //...
 
         //4) Torque Ctrl
-        _torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
+        try{_torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
             new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
                                       joint_names.size(), _task_ptr, _task_peer_ptr));
+        }catch(...){return false;}
 
         LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
 
@@ -136,23 +138,13 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
     vector<ForceTorqueFrame> ft_sensors_frames = getForceTorqueSensorsFrames();
     for(unsigned int i = 0; i < ft_sensors_frames.size(); ++i)
     {
-        _frames_ports_map[ft_sensors_frames[i]] =
-                WrenchIPort_Ptr(new WrenchIPort(ft_sensors_frames[i]+"_SensorFeedback"));
-        _task_ptr->addPort(*(_frames_ports_map.at(ft_sensors_frames[i]))).
-                doc(ft_sensors_frames[i]+"_SensorFeedback port");
-
-        _frames_ports_map.at(ft_sensors_frames[i])->connectTo(
-                    _task_peer_ptr->ports()->getPort(ft_sensors_frames[i]+"_SensorFeedback"));
-
-        Wrench tmp;
-        _frames_wrenches_map[ft_sensors_frames[i]] = tmp;
+        try{_ft_feedback[ft_sensors_frames[i]] = ForceTorqueFeedback::Ptr(
+            new ForceTorqueFeedback("SensorFeedback", ft_sensors_frames[i],
+                                    _task_ptr, _task_peer_ptr));
+        }catch(...){return false;}
 
         LOG(Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<ENDLOG();
     }
-
-
-    //Extra stuffs
-    _getControlMode = _task_peer_ptr->getOperation("getControlMode");
 
     return true;
 }
@@ -215,28 +207,19 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
-        _control_mode = _getControlMode(it->first);
 
-        if(_control_mode.compare(ControlModes::JointPositionCtrl) == 0 ||
-           _control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
-        {
             for(unsigned int i = 0; i < it->second.size(); ++i)
+            {
                 _position_ctrl.at(it->first)->cmd.angles[i] =
                         _q_ref[this->getDofIndex(it->second.at(i))];
-            _position_ctrl.at(it->first)->write();
-        }
-        if(_control_mode.compare(ControlModes::JointTorqueCtrl) == 0 ||
-           _control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
-        {
-            for(unsigned int i = 0; i < it->second.size(); ++i)
                 _torque_ctrl.at(it->first)->cmd.torques[i] =
                         _tau_ref[this->getDofIndex(it->second.at(i))];
-            _torque_ctrl.at(it->first)->write();
-        }
-        if(_control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
-        {
+            }
 
-        }
+
+            _position_ctrl.at(it->first)->write();
+            _torque_ctrl.at(it->first)->write();
+
 
     }
 
@@ -248,11 +231,10 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
     bool success = true;
 
     //For now just FT sensors
-    map<ForceTorqueFrame, Wrench>::iterator it2;
-    for(it2 = _frames_wrenches_map.begin(); it2 != _frames_wrenches_map.end(); it2++)
+    map<ForceTorqueFrame, ForceTorqueFeedback::Ptr>::iterator it2;
+    for(it2 = _ft_feedback.begin(); it2 != _ft_feedback.end(); it2++)
     {
-        FlowStatus fs = _frames_ports_map.at(it2->first)->read(
-                    _frames_wrenches_map.at(it2->first));
+        FlowStatus fs = _ft_feedback.at(it2->first)->read();
 
         auto it = getForceTorqueInternal().find(it2->first);
 
@@ -264,9 +246,8 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
         }
         else{
             _tmp_vector6.setZero();
-            _tmp_vector6<<_frames_wrenches_map.at(it2->first).forces.cast <double> (), _frames_wrenches_map.at(it2->first).torques.cast <double> ();
-            getForceTorqueInternal().at(_ftptr->getSensorName())->setWrench(
-                _tmp_vector6,getTime());
+            _tmp_vector6<<_ft_feedback.at(it2->first)->feedback.forces.cast <double> (), _ft_feedback.at(it2->first)->feedback.torques.cast <double> ();
+            getForceTorqueInternal().at(_ftptr->getSensorName())->setWrench(_tmp_vector6,getTime());
         }
     }
 
