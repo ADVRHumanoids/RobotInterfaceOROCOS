@@ -41,15 +41,89 @@ using namespace RTT;
 using namespace Eigen;
 using namespace rstrt;
 
+#define LOG(x) RTT::log(x)
+#define ENDLOG() RTT::endlog()
+
 namespace XBot
 {
-
 ///TODO: these are copied from rtt-gazebo-robot-sim, should be aligned with the one of XBotCore
 struct ControlModes{
         static constexpr const char* JointPositionCtrl = "JointPositionCtrl";
         static constexpr const char* JointTorqueCtrl = "JointTorqueCtrl";
         static constexpr const char* JointImpedanceCtrl = "JointImpedanceCtrl";
 };
+
+template <class T> class Sensor {
+public:
+    typedef boost::shared_ptr<Sensor<T> > Ptr;
+
+    Sensor(const string& feedback_name,
+           const string& kinematic_chain_name,
+           const int size,
+           shared_ptr<TaskContext> task_ptr,
+           shared_ptr<TaskContext> task_peer):
+           feedback(size)
+    {
+        port.reset(new InputPort<T>(kinematic_chain_name + feedback_name));
+        task_ptr->addPort(port->doc(kinematic_chain_name+"_"+feedback_name + " port"));
+        if(port->connectTo(task_peer->ports()->getPort(kinematic_chain_name+"_"+feedback_name)))
+            LOG(Info)<<"Connected to port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
+        else
+        {
+            LOG(Error)<<"Can not connect port: "<<kinematic_chain_name+"_"+feedback_name<<ENDLOG();
+            throw std::runtime_error("Error during port connect");
+        }
+    }
+
+    ~Sensor(){
+
+    }
+
+    FlowStatus read()
+    {
+        return port->read(feedback);
+    }
+
+    boost::shared_ptr<InputPort<T> > port;
+    T feedback;
+};
+
+template <class T> class JointCtrl {
+public:
+    typedef boost::shared_ptr<JointCtrl<T> > Ptr;
+
+    JointCtrl(const string& control_mode,
+              const string& kinematic_chain_name,
+              const int size,
+              shared_ptr<TaskContext> task_ptr,
+              shared_ptr<TaskContext> task_peer):
+        cmd(size)
+    {
+        port.reset(new OutputPort<T>(kinematic_chain_name + control_mode));
+        task_ptr->addPort(port->doc(kinematic_chain_name+"_"+control_mode + " port"));
+        if(port->connectTo(task_peer->ports()->getPort(kinematic_chain_name+"_"+control_mode)))
+            LOG(Info)<<"Connected to port: "<<kinematic_chain_name+"_"+control_mode<<ENDLOG();
+        else
+        {
+            LOG(Error)<<"Can not connect port: "<<kinematic_chain_name+"_"+control_mode<<ENDLOG();
+            throw std::runtime_error("Error during port connect");
+        }
+    }
+
+    ~JointCtrl(){
+
+    }
+
+    void write()
+    {
+        port->write(cmd);
+    }
+
+    boost::shared_ptr<OutputPort<T> > port;
+    T cmd;
+};
+
+
 
 struct FeedbackModes {
     static constexpr const char* velocityFeedback = "JointVelocity";
@@ -63,16 +137,15 @@ class RobotInterfaceOROCOS : public RobotInterface, os::TimeService
     friend RobotInterface;
 
 public:
+    typedef JointCtrl<kinematics::JointAngles> JointPositionController;
+    typedef JointCtrl<dynamics::JointTorques> JointTorqueController;
+    typedef Sensor<robot::JointState> JointFeedback;
+
     typedef string KinematicChainName;
     typedef string JointName;
     typedef vector<string> JointNames;
     typedef string ForceTorqueFrame;
-    typedef InputPort<robot::JointState> JointStateIPort;
-    typedef boost::shared_ptr<JointStateIPort> JointStateIPort_Ptr;
-    typedef OutputPort<kinematics::JointAngles> JointPositionOPort;
-    typedef boost::shared_ptr<JointPositionOPort> JointPositionOPort_Ptr;
-    typedef OutputPort<dynamics::JointTorques> JointTorqueOPort;
-    typedef boost::shared_ptr<JointTorqueOPort> JointTorqueOPort_Ptr;
+
     typedef InputPort<dynamics::Wrench> WrenchIPort;
     typedef boost::shared_ptr<WrenchIPort> WrenchIPort_Ptr;
 
@@ -102,14 +175,13 @@ private:
 
     map<KinematicChainName, JointNames > _map_kin_chains_joints;
 
-    map<KinematicChainName, JointStateIPort_Ptr > _kinematic_chains_feedback_ports;
-    map<KinematicChainName, JointPositionOPort_Ptr > _kinematic_chains_output_position_ports;
-    map<KinematicChainName, JointTorqueOPort_Ptr > _kinematic_chains_output_torque_ports;
+    map<KinematicChainName, JointPositionController::Ptr> _position_ctrl;
+    map<KinematicChainName, JointTorqueController::Ptr> _torque_ctrl;
+
+    map<KinematicChainName, JointFeedback::Ptr> _joint_feedback;
+
     map<ForceTorqueFrame, WrenchIPort_Ptr > _frames_ports_map;
 
-    map<KinematicChainName, robot::JointState> _kinematic_chains_joint_state_map;
-    map<KinematicChainName, kinematics::JointAngles> _kinematic_chains_desired_joint_position_map;
-    map<KinematicChainName, dynamics::JointTorques> _kinematic_chains_desired_joint_torque_map;
     map<ForceTorqueFrame, dynamics::Wrench> _frames_wrenches_map;
 
 
@@ -120,6 +192,8 @@ private:
 
     VectorXd _q_ref;
     VectorXd _tau_ref;
+    VectorXd _stiffness_ref;
+    VectorXd _damping_ref;
 
 
     ForceTorqueSensor::ConstPtr _ftptr;

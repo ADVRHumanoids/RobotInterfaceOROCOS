@@ -23,9 +23,6 @@
 
 REGISTER_SO_LIB_(XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
 
-#define LOG(x) RTT::log(x)
-#define ENDLOG() RTT::endlog()
-
 using namespace rstrt::dynamics;
 using namespace rstrt::kinematics;
 using namespace rstrt::robot;
@@ -68,6 +65,8 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
 
     _q_ref.setZero(this->getJointNum());
     _tau_ref.setZero(this->getJointNum());
+    _stiffness_ref.setZero(this->getJointNum());
+    _damping_ref.setZero(this->getJointNum());
 
     if(!any_map){
         LOG(Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << ENDLOG();
@@ -109,46 +108,26 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
         JointNames joint_names = it->second;
 
         //1) Feedback from joints
-        _kinematic_chains_feedback_ports[kin_chain_name] =
-            JointStateIPort_Ptr(new JointStateIPort(kin_chain_name+"_"+"JointFeedback"));
-
-        _task_ptr->addPort(*(_kinematic_chains_feedback_ports.at(kin_chain_name))).
-                doc(kin_chain_name+"_"+"JointFeedback port");
-
-        _kinematic_chains_feedback_ports.at(kin_chain_name)->connectTo(
-                    _task_peer_ptr->ports()->getPort(kin_chain_name+"_"+"JointFeedback"));
-
-        JointState tmp(joint_names.size());
-        _kinematic_chains_joint_state_map[kin_chain_name] = tmp;
-        LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
-
+        _joint_feedback[kin_chain_name] = JointFeedback::Ptr(
+                new JointFeedback("JointFeedback", kin_chain_name, joint_names.size(),
+                                  _task_ptr, _task_peer_ptr));
 
         //2) Position Ctrl
-        _kinematic_chains_output_position_ports[kin_chain_name] =
-                JointPositionOPort_Ptr(new JointPositionOPort(kin_chain_name+"_"+"JointPositionCtrl"));
-        _task_ptr->addPort(*(_kinematic_chains_output_position_ports.at(kin_chain_name))).
-                doc(kin_chain_name+"_"+"JointPositionCtrl port");
-        _kinematic_chains_output_position_ports.at(kin_chain_name)->connectTo(
-                    _task_peer_ptr->ports()->getPort(kin_chain_name+"_"+"JointPositionCtrl"));
-        JointAngles tmp2(joint_names.size());
-        _kinematic_chains_desired_joint_position_map[kin_chain_name] = tmp2;
+        _position_ctrl[kin_chain_name] = JointPositionController::Ptr(
+            new JointPositionController(ControlModes::JointPositionCtrl,kin_chain_name,
+                                        joint_names.size(), _task_ptr, _task_peer_ptr));
+
 
         //3) Impedance Ctrl
         //...
 
         //4) Torque Ctrl
-        _kinematic_chains_output_torque_ports[kin_chain_name] =
-                JointTorqueOPort_Ptr(new JointTorqueOPort(kin_chain_name+"_"+"JointTorqueCtrl"));
-        _task_ptr->addPort(*(_kinematic_chains_output_torque_ports.at(kin_chain_name))).
-                doc(kin_chain_name+"_"+"JointTorqueCtrl port");
-        _kinematic_chains_output_torque_ports.at(kin_chain_name)->connectTo(
-                    _task_peer_ptr->ports()->getPort(kin_chain_name+"_"+"JointTorqueCtrl"));
-        JointTorques tmp3(joint_names.size());
-        _kinematic_chains_desired_joint_torque_map[kin_chain_name] = tmp3;
+        _torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
+            new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
+                                      joint_names.size(), _task_ptr, _task_peer_ptr));
 
+        LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
 
-        //Extra stuffs
-        _getControlMode = _task_peer_ptr->getOperation("getControlMode");
     }
 
     //SECOND FT SENSORS
@@ -171,6 +150,10 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
         LOG(Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<ENDLOG();
     }
 
+
+    //Extra stuffs
+    _getControlMode = _task_peer_ptr->getOperation("getControlMode");
+
     return true;
 }
 
@@ -181,19 +164,18 @@ bool XBot::RobotInterfaceOROCOS::sense_internal()
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
-        FlowStatus fs = _kinematic_chains_feedback_ports.at(it->first)->read(
-                    _kinematic_chains_joint_state_map.at(it->first));
+        FlowStatus fs = _joint_feedback.at(it->first)->read();
 
         for(unsigned int i = 0; i < it->second.size(); ++i)
         {
             _q[this->getDofIndex(it->second.at(i))] =
-                    _kinematic_chains_joint_state_map.at(it->first).angles[i];
+                    _joint_feedback.at(it->first)->feedback.angles[i];
 
             _qdot[this->getDofIndex(it->second.at(i))] =
-                    _kinematic_chains_joint_state_map.at(it->first).velocities[i];
+                    _joint_feedback.at(it->first)->feedback.velocities[i];
 
             _tau[this->getDofIndex(it->second.at(i))] =
-                    _kinematic_chains_joint_state_map.at(it->first).torques[i];
+                    _joint_feedback.at(it->first)->feedback.torques[i];
         }
     }
 
@@ -227,35 +209,35 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
     // For now position ctrl
     this->getPositionReference(_q_ref);
     this->getEffortReference(_tau_ref);
+    this->getStiffness(_stiffness_ref);
+    this->getDamping(_damping_ref);
 
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
         _control_mode = _getControlMode(it->first);
 
-        if(_control_mode.compare(ControlModes::JointPositionCtrl) == 0)
+        if(_control_mode.compare(ControlModes::JointPositionCtrl) == 0 ||
+           _control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
         {
             for(unsigned int i = 0; i < it->second.size(); ++i)
-                _kinematic_chains_desired_joint_position_map.at(it->first).angles[i] =
+                _position_ctrl.at(it->first)->cmd.angles[i] =
                         _q_ref[this->getDofIndex(it->second.at(i))];
-
-            _kinematic_chains_output_position_ports.at(it->first)->
-                    write(_kinematic_chains_desired_joint_position_map.at(it->first));
+            _position_ctrl.at(it->first)->write();
         }
-        if(_control_mode.compare(ControlModes::JointTorqueCtrl) == 0)
+        if(_control_mode.compare(ControlModes::JointTorqueCtrl) == 0 ||
+           _control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
         {
             for(unsigned int i = 0; i < it->second.size(); ++i)
-                _kinematic_chains_desired_joint_torque_map.at(it->first).torques[i] =
+                _torque_ctrl.at(it->first)->cmd.torques[i] =
                         _tau_ref[this->getDofIndex(it->second.at(i))];
-
-            _kinematic_chains_output_torque_ports.at(it->first)->
-                    write(_kinematic_chains_desired_joint_torque_map.at(it->first));
+            _torque_ctrl.at(it->first)->write();
         }
-        else
+        if(_control_mode.compare(ControlModes::JointImpedanceCtrl) == 0)
         {
-            LOG(Error)<<_control_mode<<" is not available in RobotInterfaceOROCOS!"<<ENDLOG();
-            return false;
+
         }
+
     }
 
     return true;
