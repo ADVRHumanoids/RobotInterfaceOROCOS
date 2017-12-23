@@ -43,6 +43,19 @@ using namespace rstrt;
 namespace XBot
 {
 
+///TODO: these are copied from rtt-gazebo-robot-sim, should be aligned with the one of XBotCore
+struct ControlModes{
+        static constexpr const char* JointPositionCtrl = "JointPositionCtrl";
+        static constexpr const char* JointTorqueCtrl = "JointTorqueCtrl";
+        static constexpr const char* JointImpedanceCtrl = "JointImpedanceCtrl";
+};
+
+struct FeedbackModes {
+    static constexpr const char* velocityFeedback = "JointVelocity";
+    static constexpr const char* torqueFeedback = "JointTorque";
+    static constexpr const char* positionFeedback = "JointPosition";
+};
+
 class RobotInterfaceOROCOS : public RobotInterface, os::TimeService
 {
 
@@ -94,10 +107,14 @@ private:
     VectorXd _tau;
 
     VectorXd _q_ref;
+    VectorXd _tau_ref;
 
 
     ForceTorqueSensor::ConstPtr _ftptr;
     Vector6d _tmp_vector6;
+
+    std::string _control_mode;
+    OperationCaller<std::string(std::string) > _getControlMode;
 };
 
 }

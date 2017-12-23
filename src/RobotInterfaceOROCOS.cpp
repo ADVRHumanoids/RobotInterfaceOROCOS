@@ -67,6 +67,7 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
     _tau.setZero(this->getJointNum());
 
     _q_ref.setZero(this->getJointNum());
+    _tau_ref.setZero(this->getJointNum());
 
     if(!any_map){
         LOG(Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << ENDLOG();
@@ -139,6 +140,10 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
 
         //4) Torque Ctrl
         //...
+
+
+        //Extra stuffs
+        _getControlMode = _task_peer_ptr->getOperation("getControlMode");
     }
 
     //SECOND FT SENSORS
@@ -217,16 +222,27 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
 {
     // For now position ctrl
     this->getPositionReference(_q_ref);
+    this->getEffortReference(_tau_ref);
 
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
-        for(unsigned int i = 0; i < it->second.size(); ++i)
-            _kinematic_chains_desired_joint_state_map.at(it->first).angles[i] =
-                    _q_ref[this->getDofIndex(it->second.at(i))];
+        _control_mode = _getControlMode(it->first);
 
-        _kinematic_chains_output_ports.at(it->first)->
-                write(_kinematic_chains_desired_joint_state_map.at(it->first));
+        if(_control_mode.compare(ControlModes::JointPositionCtrl) == 0)
+        {
+            for(unsigned int i = 0; i < it->second.size(); ++i)
+                _kinematic_chains_desired_joint_state_map.at(it->first).angles[i] =
+                        _q_ref[this->getDofIndex(it->second.at(i))];
+
+            _kinematic_chains_output_ports.at(it->first)->
+                    write(_kinematic_chains_desired_joint_state_map.at(it->first));
+        }
+        else
+        {
+            LOG(Error)<<_control_mode<<" is not available in RobotInterfaceOROCOS!"<<ENDLOG();
+            return false;
+        }
     }
 
     return true;
