@@ -66,12 +66,15 @@ public:
     typedef string KinematicChainName;
     typedef string JointName;
     typedef vector<string> JointNames;
+    typedef string ForceTorqueFrame;
     typedef InputPort<robot::JointState> JointStateIPort;
     typedef boost::shared_ptr<JointStateIPort> JointStateIPort_Ptr;
     typedef OutputPort<kinematics::JointAngles> JointPositionOPort;
     typedef boost::shared_ptr<JointPositionOPort> JointPositionOPort_Ptr;
     typedef OutputPort<dynamics::JointTorques> JointTorqueOPort;
     typedef boost::shared_ptr<JointTorqueOPort> JointTorqueOPort_Ptr;
+    typedef InputPort<dynamics::Wrench> WrenchIPort;
+    typedef boost::shared_ptr<WrenchIPort> WrenchIPort_Ptr;
 
     RobotInterfaceOROCOS() {}
 
@@ -102,12 +105,12 @@ private:
     map<KinematicChainName, JointStateIPort_Ptr > _kinematic_chains_feedback_ports;
     map<KinematicChainName, JointPositionOPort_Ptr > _kinematic_chains_output_position_ports;
     map<KinematicChainName, JointTorqueOPort_Ptr > _kinematic_chains_output_torque_ports;
-    map<string, boost::shared_ptr<InputPort<dynamics::Wrench> > > _frames_ports_map;
+    map<ForceTorqueFrame, WrenchIPort_Ptr > _frames_ports_map;
 
     map<KinematicChainName, robot::JointState> _kinematic_chains_joint_state_map;
     map<KinematicChainName, kinematics::JointAngles> _kinematic_chains_desired_joint_position_map;
     map<KinematicChainName, dynamics::JointTorques> _kinematic_chains_desired_joint_torque_map;
-    map<string, dynamics::Wrench> _frames_wrenches_map;
+    map<ForceTorqueFrame, dynamics::Wrench> _frames_wrenches_map;
 
 
     //For now these variable are motor side AND link side

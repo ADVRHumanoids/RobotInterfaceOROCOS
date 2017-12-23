@@ -152,14 +152,13 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
     }
 
     //SECOND FT SENSORS
-    OperationCaller<vector<string> (void) > getForceTorqueSensorsFrames
+    OperationCaller<vector<ForceTorqueFrame> (void) > getForceTorqueSensorsFrames
         = _task_peer_ptr->getOperation("getForceTorqueSensorsFrames");
-    vector<string> ft_sensors_frames = getForceTorqueSensorsFrames();
+    vector<ForceTorqueFrame> ft_sensors_frames = getForceTorqueSensorsFrames();
     for(unsigned int i = 0; i < ft_sensors_frames.size(); ++i)
     {
         _frames_ports_map[ft_sensors_frames[i]] =
-                boost::shared_ptr<InputPort<Wrench> >(new InputPort<Wrench>(
-                        ft_sensors_frames[i]+"_SensorFeedback"));
+                WrenchIPort_Ptr(new WrenchIPort(ft_sensors_frames[i]+"_SensorFeedback"));
         _task_ptr->addPort(*(_frames_ports_map.at(ft_sensors_frames[i]))).
                 doc(ft_sensors_frames[i]+"_SensorFeedback port");
 
@@ -267,7 +266,7 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
     bool success = true;
 
     //For now just FT sensors
-    map<string, rstrt::dynamics::Wrench>::iterator it2;
+    map<ForceTorqueFrame, Wrench>::iterator it2;
     for(it2 = _frames_wrenches_map.begin(); it2 != _frames_wrenches_map.end(); it2++)
     {
         FlowStatus fs = _frames_ports_map.at(it2->first)->read(
