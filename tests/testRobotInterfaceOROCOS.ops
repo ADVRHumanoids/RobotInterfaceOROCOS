@@ -8,7 +8,8 @@ loadComponent("gazebo","RTTGazeboEmbedded")
 
 setActivity("gazebo",0,10,ORO_SCHED_OTHER)
 
-gazebo.argv = strings("--verbose","-s /orocos/gnulinux/rtt_gazebo_system/librtt_gazebo_system.so")
+var string plg = os.getenv("ROBOTOLOGY_ROOT")+"/build/install/lib/orocos/gnulinux/RTTGazeboClockPlugin/libRTTGazeboClockPlugin.so"
+gazebo.add_plugin(plg)
 
 var string path_world=os.getenv("ROBOTOLOGY_ROOT")+"/robots/cogimon-gazebo-models/iit-cogimon/empty.world"
 gazebo.world_path = path_world
@@ -27,8 +28,8 @@ import("rtt-gazebo-robot-sim")
 loadComponent("cogimon","cogimon::robotSim")
 setActivity("cogimon",0,11,ORO_SCHED_OTHER)
 
-var string urdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/cogimon-gazebo-models/iit-cogimon/model.urdf"
-var string srdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/cogimon-gazebo-models/iit-cogimon/cogimon.srdf"
+var string urdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/iit-cogimon-ros-pkg/cogimon_urdf/urdf/cogimon.urdf"
+var string srdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/iit-cogimon-ros-pkg/cogimon_srdf/srdf/cogimon.srdf"
 cogimon.loadURDFAndSRDF(urdf_path, srdf_path)
 cogimon.getModel("cogimon")
 cogimon.configure()
