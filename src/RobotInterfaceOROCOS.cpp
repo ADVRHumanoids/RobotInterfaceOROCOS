@@ -268,8 +268,7 @@ bool XBot::RobotInterfaceOROCOS::sense_hands()
 
 bool XBot::RobotInterfaceOROCOS::set_control_mode_internal ( int joint_id, const ControlMode& control_mode )
 {
-    LOG(Debug)<<"set_control_mode_internal(...) is not yet implemented!"<<ENDLOG();
-    return false;
+    return true;
 }
 
 
