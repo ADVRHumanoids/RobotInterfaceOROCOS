@@ -178,7 +178,7 @@ public:
 
 protected:
 
-    virtual bool init_robot(const string &path_to_cfg, AnyMapConstPtr any_map);
+    virtual bool init_robot(const XBot::ConfigOptions& cfg);
     virtual bool move_internal();
     virtual bool sense_internal();
     virtual bool read_sensors();

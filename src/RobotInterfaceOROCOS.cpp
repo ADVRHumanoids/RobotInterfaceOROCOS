@@ -20,7 +20,6 @@
 #include <RobotInterfaceOROCOS/RobotInterfaceOROCOS.h>
 #include <rtt/Logger.hpp>
 
-
 REGISTER_SO_LIB_(XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
 
 using namespace rstrt::dynamics;
@@ -33,17 +32,18 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name, const s
 {
     LOG(Info)<<"Robot name: "<<robot_name<<ENDLOG();
 
+    auto cfg = XBot::ConfigOptions::FromConfigFile(config_path);
+
     shared_ptr<TaskContext> task_ptr(task->getPeer(robot_name));
     if(!task_ptr){
         LOG(Error)<<"Can not getPeer("<<robot_name<<")"<<ENDLOG();
         return false;}
 
-    shared_ptr<map<string, boost::any >> anymap(new map<string, boost::any >);
-    (*anymap)["TaskContextPtr"] = task;
-    (*anymap)["TaskPeerContextPtr"] = task_ptr;
+    cfg.set_parameter("TaskContextPtr", task);
+    cfg.set_parameter("TaskPeerContextPtr", task_ptr);
 
 
-    _robot = XBot::RobotInterface::getRobot(config_path,robot_name, anymap);
+    _robot = XBot::RobotInterface::getRobot(cfg, robot_name);
     if(_robot)
     {
         LOG(Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<ENDLOG();
@@ -54,7 +54,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name, const s
 
 }
 
-bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapConstPtr any_map)
+bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
 {
     LOG(Info)<<"Constructing OROCOS implementation of RobotInterface!"<<ENDLOG();
     LOG(Info)<<"Robot has "<<this->getJointNum()<<" dofs"<<ENDLOG();
@@ -68,32 +68,17 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const string &path_to_cfg, AnyMapCon
     _stiffness_ref.setZero(this->getJointNum());
     _damping_ref.setZero(this->getJointNum());
 
-    if(!any_map){
-        LOG(Error) << "ERROR in " << __func__ << "! TBD explain what to do!" << ENDLOG();
+    if( !cfg.get_parameter("TaskContextPtr",_task_ptr)){
+        LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
         return false;
     }
+    LOG(Info) << "TaskContextPtr found!" << ENDLOG();
 
-    if( any_map->count("TaskContextPtr") ){
-        try{
-            _task_ptr = boost::any_cast<shared_ptr<TaskContext> >(any_map->at("TaskContextPtr"));
-            LOG(Info) << "TaskContextPtr found!" << ENDLOG();
-        }
-        catch(...){
-            LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
-            return false;
-        }
+    if(!cfg.get_parameter("TaskPeerContextPtr",_task_peer_ptr)){
+        LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskPeerContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
+        return false;
     }
-
-    if( any_map->count("TaskPeerContextPtr") ){
-        try{
-            _task_peer_ptr = boost::any_cast<shared_ptr<TaskContext> >(any_map->at("TaskPeerContextPtr"));
-            LOG(Info) << "TaskPeerContextPtr found!" << ENDLOG();
-        }
-        catch(...){
-            LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskPeerContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
-            return false;
-        }
-    }
+    LOG(Info) << "TaskPeerContextPtr found!" << ENDLOG();
 
     //FIRST KINEMATICH CHAINS
     OperationCaller<map<KinematicChainName, JointNames >(void) > getKinematicChainsAndJoints
