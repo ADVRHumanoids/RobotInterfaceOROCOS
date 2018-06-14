@@ -177,6 +177,11 @@ public:
     virtual bool isRunning() const;
 
     static bool attachToRobot(const string &robot_name,
+                              const string &path_to_config,
+                              RobotInterface::Ptr& _robot,
+                              shared_ptr<TaskContext> task);
+
+    static bool attachToRobot(const string &robot_name,
                               const string &path_to_urdf,
                               const string &path_to_srdf,
                               const bool is_robot_floating_base,

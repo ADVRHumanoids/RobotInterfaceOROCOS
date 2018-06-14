@@ -27,6 +27,34 @@ using namespace rstrt::kinematics;
 using namespace rstrt::robot;
 
 bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
+                          const string &path_to_config,
+                           RobotInterface::Ptr& _robot,
+                           shared_ptr<TaskContext> task)
+{
+    XBot::ConfigOptions cfg = XBot::ConfigOptions::FromConfigFile(path_to_config);
+
+    std::string urdf_path;
+    if(!cfg.get_urdf_path(urdf_path)){
+        LOG(Error)<<"Config file does not contain a path to urdf file!"<<ENDLOG();
+        return false;
+    }
+    std::string srdf_path;
+    if(!cfg.get_srdf_path(srdf_path)){
+        LOG(Error)<<"Config file does not contain a path to srdf file!"<<ENDLOG();
+        return false;
+    }
+
+    bool is_floating_base;
+    cfg.get_parameter("is_model_floating_base", is_floating_base);
+
+    std::string model_type;
+    cfg.get_parameter("model_type", model_type);
+
+    return attachToRobot(robot_name, urdf_path, srdf_path, is_floating_base, model_type, _robot, task);
+}
+
+
+bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
                                                const string &path_to_urdf,
                                                const string &path_to_srdf,
                                                const bool is_robot_floating_base,
