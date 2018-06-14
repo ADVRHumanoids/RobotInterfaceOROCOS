@@ -26,13 +26,24 @@ using namespace rstrt::dynamics;
 using namespace rstrt::kinematics;
 using namespace rstrt::robot;
 
-bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name, const string &config_path,
+bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
+                                               const string &path_to_urdf,
+                                               const string &path_to_srdf,
+                                               const bool is_robot_floating_base,
+                                               const string &model_type,
                                          RobotInterface::Ptr& _robot,
                                          shared_ptr<TaskContext> task)
 {
     LOG(Info)<<"Robot name: "<<robot_name<<ENDLOG();
 
-    auto cfg = XBot::ConfigOptions::FromConfigFile(config_path);
+    XBot::ConfigOptions cfg;
+    cfg.set_urdf_path(path_to_urdf);
+    cfg.set_srdf_path(path_to_srdf);
+    cfg.generate_jidmap();
+    std::string framework = "OROCOS";
+    cfg.set_parameter("framework", framework);
+    cfg.set_parameter("is_model_floating_base", is_robot_floating_base);
+    cfg.set_parameter("model_type", model_type);
 
     shared_ptr<TaskContext> task_ptr(task->getPeer(robot_name));
     if(!task_ptr){
@@ -41,7 +52,6 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name, const s
 
     cfg.set_parameter("TaskContextPtr", task);
     cfg.set_parameter("TaskPeerContextPtr", task_ptr);
-
 
     _robot = XBot::RobotInterface::getRobot(cfg, robot_name);
     if(_robot)
@@ -131,6 +141,21 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
         LOG(Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<ENDLOG();
     }
 
+    //THIRD IMU SENSORS
+    OperationCaller<vector<IMUFrame> (void) > getImuSensorsFrames
+        = _task_peer_ptr->getOperation("getIMUSensorsFrames") ;
+    vector<IMUFrame> imu_sensors_frames = getImuSensorsFrames();
+    for(unsigned int i = 0; i < imu_sensors_frames.size(); ++i)
+    {
+        try{_imu_feedback[imu_sensors_frames[i]] = IMUFeedback::Ptr(
+            new IMUFeedback("SensorFeedback", imu_sensors_frames[i],
+                            _task_ptr, _task_peer_ptr));
+
+        }catch(...){return false;}
+
+        LOG(Info)<<"Added "<<imu_sensors_frames[i]<<" port and data"<<ENDLOG();
+    }
+
     return true;
 }
 
@@ -215,7 +240,6 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
 {
     bool success = true;
 
-    //For now just FT sensors
     map<ForceTorqueFrame, ForceTorqueFeedback::Ptr>::iterator it2;
     for(it2 = _ft_feedback.begin(); it2 != _ft_feedback.end(); it2++)
     {
@@ -226,13 +250,42 @@ bool XBot::RobotInterfaceOROCOS::read_sensors()
         if( it != getForceTorqueInternal().end() )
             _ftptr = it->second;
         if(!_ftptr){
-            LOG(Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it2->first << " is present in given URDF/SRDF! Check that FTmsg.header.frame_id is the parent link of the sensor name in URDF! Also check that FT fixed joints are defined inside the force_torque_sensors SRDF group" << ENDLOG();
+            LOG(Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it2->first << " is present in given URDF/SRDF! Check that FT msg.header.frame_id is the parent link of the sensor name in URDF! Also check that FT fixed joints are defined inside the force_torque_sensors SRDF group" << ENDLOG();
             success = false;
         }
         else{
             _tmp_vector6.setZero();
             _tmp_vector6<<_ft_feedback.at(it2->first)->feedback.forces.cast <double> (), _ft_feedback.at(it2->first)->feedback.torques.cast <double> ();
             getForceTorqueInternal().at(_ftptr->getSensorName())->setWrench(_tmp_vector6,getTime());
+        }
+    }
+
+    map<IMUFrame, IMUFeedback::Ptr>::iterator it3;
+    for(it3 = _imu_feedback.begin(); it3 != _imu_feedback.end(); it3++)
+    {
+        FlowStatus fs = _imu_feedback.at(it3->first)->read();
+
+        auto it = getImuInternal().find(it3->first);
+
+        if(it != getImuInternal().end() )
+            _imuptr = it->second;
+        if(!_imuptr){
+            LOG(Error) << "WARNING in " << __func__ << ": no sensor corresponding to link " << it3->first << " is present in given URDF/SRDF! Check that IMU msg.header.frame_id is the parent link of the sensor name in URDF!" << ENDLOG();
+            success = false;
+        }
+        else{
+            _tmp_quaternion.setIdentity();
+            _tmp_vector3d_1.setZero();
+            _tmp_vector3d_2.setZero();
+            _tmp_vector_4f.setZero();
+
+            _tmp_vector3d_1 = _imu_feedback.at(it3->first)->feedback.linearAcceleration.cast <double> ();
+            _tmp_vector3d_2 = _imu_feedback.at(it3->first)->feedback.angularVelocity.cast <double> ();
+            _tmp_vector_4f = _imu_feedback.at(it3->first)->feedback.rotation;
+
+            _tmp_quaternion.coeffs() = _tmp_vector_4f.cast <double> ();
+
+            getImuInternal().at(_imuptr->getSensorName())->setImuData(_tmp_quaternion, _tmp_vector3d_1,_tmp_vector3d_2, getTime());
         }
     }
 

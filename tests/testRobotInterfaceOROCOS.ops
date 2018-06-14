@@ -45,8 +45,8 @@ gazebo.toggleDynamicsSimulation(true)
 import("RobotInterfaceOROCOS")
 loadComponent("interface_test", "robot_interface_orocos_test")
 
-var string config_path = os.getenv("ROBOTOLOGY_ROOT") + "/external/RobotInterfaceOROCOS/tests/cogimon_config.yaml"
+#var string config_path = os.getenv("ROBOTOLOGY_ROOT") + "/external/RobotInterfaceOROCOS/tests/cogimon_config.yaml"
 
 addPeer("interface_test", "cogimon")
-interface_test.attachToRobot("cogimon", config_path)
+interface_test.attachToRobot("cogimon", urdf_path, srdf_path)
 interface_test.start()

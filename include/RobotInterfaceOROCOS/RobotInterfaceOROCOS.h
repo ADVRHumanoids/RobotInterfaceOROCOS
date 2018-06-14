@@ -29,6 +29,7 @@
 #include <rst-rt/kinematics/JointAngles.hpp>
 #include <rst-rt/dynamics/JointTorques.hpp>
 #include <rst-rt/dynamics/Wrench.hpp>
+#include <rst-rt/robot/IMU.hpp>
 #include <std_msgs/Float64.h>
 
 #include <XBotInterface/SoLib.h>
@@ -158,11 +159,13 @@ public:
     typedef JointCtrl<dynamics::JointTorques> JointTorqueController;
     typedef Sensor<robot::JointState> JointFeedback;
     typedef Sensor<dynamics::Wrench> ForceTorqueFeedback;
+    typedef Sensor<robot::IMU> IMUFeedback;
 
     typedef string KinematicChainName;
     typedef string JointName;
     typedef vector<string> JointNames;
     typedef string ForceTorqueFrame;
+    typedef string IMUFrame;
 
 
     RobotInterfaceOROCOS() {}
@@ -173,8 +176,13 @@ public:
 
     virtual bool isRunning() const;
 
-    static bool attachToRobot(const string &robot_name, const string &config_path,
-                              RobotInterface::Ptr& _robot, shared_ptr<TaskContext> task);
+    static bool attachToRobot(const string &robot_name,
+                              const string &path_to_urdf,
+                              const string &path_to_srdf,
+                              const bool is_robot_floating_base,
+                              const string &model_type,
+                              RobotInterface::Ptr& _robot,
+                              shared_ptr<TaskContext> task);
 
 protected:
 
@@ -196,6 +204,7 @@ private:
 
     map<KinematicChainName, JointFeedback::Ptr> _joint_feedback;
     map<ForceTorqueFrame, ForceTorqueFeedback::Ptr> _ft_feedback;
+    map<IMUFrame, IMUFeedback::Ptr> _imu_feedback;
 
     //For now these variable are motor side AND link side
     VectorXd _q;
@@ -210,6 +219,12 @@ private:
 
     ForceTorqueSensor::ConstPtr _ftptr;
     Vector6d _tmp_vector6;
+
+    ImuSensor::ConstPtr _imuptr;
+    Vector3d _tmp_vector3d_1;
+    Vector3d _tmp_vector3d_2;
+    Quaterniond _tmp_quaternion;
+    Eigen::Matrix<float, 4, 1> _tmp_vector_4f;
 
 };
 

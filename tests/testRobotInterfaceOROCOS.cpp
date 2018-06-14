@@ -110,12 +110,25 @@ public:
             std::cout<<it->first<<": "<<w<<std::endl;
         }
 
+        std::map< std::string,XBot::ImuSensor::ConstPtr > imumap = _robot->getImu();
+        std::map< std::string,XBot::ImuSensor::ConstPtr >::iterator it2;
+        for(it2 = imumap.begin(); it2 != imumap.end(); it2++){
+            Eigen::Quaterniond quat;
+            it2->second->getOrientation(quat);
+            std::cout<<it2->first<<" quaternion: "<<quat.coeffs()<<std::endl;
+            Eigen::Vector3d tmp;
+            it2->second->getLinearAcceleration(tmp);
+            std::cout<<it2->first<<" linear acc: "<<tmp<<std::endl;
+            it2->second->getAngularVelocity(tmp);
+            std::cout<<it2->first<<" angular vel: "<<tmp<<std::endl;
+        }
+
         return true;
     }
 
-    bool attachToRobot(const std::string &robot_name, const std::string &config_path)
+    bool attachToRobot(const std::string &robot_name, const std::string &urdf_path, const std::string &srdf_path)
     {
-        bool a =  XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, config_path,
+        bool a =  XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, urdf_path, srdf_path, true, "RBDL",
             _robot, std::shared_ptr<RTT::TaskContext>(this));
 
         if(!a)
