@@ -24,7 +24,15 @@ if(COMMAND cmake_policy)
     cmake_policy(SET CMP0017 NEW)
 endif(COMMAND cmake_policy)
 
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 include(ExternalProject)
+
+set(ENABLE_XENO CACHE BOOL "ON")
+if ( ${ENABLE_XENO} )
+    find_package(Xenomai)
+endif()
 
 project(RobotInterfaceOROCOS)
 
@@ -85,7 +93,9 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(RobotInterfaceOROCOS PUBLIC ${XBotInterface_INCLUDE_DIRS}
                         ${EIGEN3_INCLUDE_DIRS})
 
-
+if(${ENABLE_XENO})
+    set_xeno_flags(RobotInterfaceOROCOS)
+endif()
                                         
     ########################################################################
 
