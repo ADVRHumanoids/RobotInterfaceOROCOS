@@ -128,7 +128,7 @@ public:
 
     bool attachToRobot(const std::string &robot_name, const std::string &urdf_path, const std::string &srdf_path)
     {
-        bool a =  XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, urdf_path, srdf_path, true, "RBDL",
+        bool a =  XBot::RobotInterfaceOROCOS::attachToRobot(robot_name, urdf_path, srdf_path, true, "RBDL","",
             _robot, std::shared_ptr<RTT::TaskContext>(this));
 
         if(!a)

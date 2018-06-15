@@ -186,6 +186,12 @@ public:
                               const string &path_to_srdf,
                               const bool is_robot_floating_base,
                               const string &model_type,
+                              const string &jid_map,
+                              RobotInterface::Ptr& _robot,
+                              shared_ptr<TaskContext> task);
+
+    static bool attachToRobot(const string &robot_name,
+                              XBot::ConfigOptions cfg,
                               RobotInterface::Ptr& _robot,
                               shared_ptr<TaskContext> task);
 

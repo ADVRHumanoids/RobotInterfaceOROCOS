@@ -33,24 +33,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
 {
     XBot::ConfigOptions cfg = XBot::ConfigOptions::FromConfigFile(path_to_config);
 
-    std::string urdf_path;
-    if(!cfg.get_urdf_path(urdf_path)){
-        LOG(Error)<<"Config file does not contain a path to urdf file!"<<ENDLOG();
-        return false;
-    }
-    std::string srdf_path;
-    if(!cfg.get_srdf_path(srdf_path)){
-        LOG(Error)<<"Config file does not contain a path to srdf file!"<<ENDLOG();
-        return false;
-    }
-
-    bool is_floating_base;
-    cfg.get_parameter("is_model_floating_base", is_floating_base);
-
-    std::string model_type;
-    cfg.get_parameter("model_type", model_type);
-
-    return attachToRobot(robot_name, urdf_path, srdf_path, is_floating_base, model_type, _robot, task);
+    return attachToRobot(robot_name, cfg, _robot, task);
 }
 
 
@@ -59,19 +42,32 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
                                                const string &path_to_srdf,
                                                const bool is_robot_floating_base,
                                                const string &model_type,
+                                               const string &jid_map,
                                          RobotInterface::Ptr& _robot,
                                          shared_ptr<TaskContext> task)
 {
-    LOG(Info)<<"Robot name: "<<robot_name<<ENDLOG();
-
     XBot::ConfigOptions cfg;
     cfg.set_urdf_path(path_to_urdf);
     cfg.set_srdf_path(path_to_srdf);
-    cfg.generate_jidmap();
+    if(jid_map.empty())
+        cfg.generate_jidmap();
+    else
+        cfg.set_jidmap(jid_map);
     std::string framework = "OROCOS";
     cfg.set_parameter("framework", framework);
     cfg.set_parameter("is_model_floating_base", is_robot_floating_base);
     cfg.set_parameter("model_type", model_type);
+
+    return attachToRobot(robot_name, cfg, _robot, task);
+
+}
+
+bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
+                                                  XBot::ConfigOptions cfg,
+                                                  RobotInterface::Ptr& _robot,
+                                                  shared_ptr<TaskContext> task)
+{
+    LOG(Info)<<"Robot name: "<<robot_name<<ENDLOG();
 
     shared_ptr<TaskContext> task_ptr(task->getPeer(robot_name));
     if(!task_ptr){
@@ -89,7 +85,6 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
     }
     LOG(Error)<<"CAN NOT LOAD ROBOT INTERFACE OROCOS"<<ENDLOG();
     return false;
-
 }
 
 bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
