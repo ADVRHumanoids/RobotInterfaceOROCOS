@@ -27,7 +27,7 @@ public:
     robot_interface_orocos_test(std::string const & name):
         RTT::TaskContext(name)
     {
-        this->setActivity(new RTT::Activity(1, 0.01));
+        //this->setActivity(new RTT::Activity(1, 0.01));
 
         this->addOperation("attachToRobot", &robot_interface_orocos_test::attachToRobot,
                     this, RTT::ClientThread);

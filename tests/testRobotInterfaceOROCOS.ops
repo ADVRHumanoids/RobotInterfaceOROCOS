@@ -44,6 +44,7 @@ gazebo.toggleDynamicsSimulation(true)
 ## TEST
 import("RobotInterfaceOROCOS")
 loadComponent("interface_test", "robot_interface_orocos_test")
+setActivity("interface_test",0.01,10,ORO_SCHED_OTHER)
 
 #var string config_path = os.getenv("ROBOTOLOGY_ROOT") + "/external/RobotInterfaceOROCOS/tests/cogimon_config.yaml"
 
