@@ -49,6 +49,15 @@ public:
 
     bool startHook()
     {
+        Eigen::VectorXd q_ref;
+        _robot->getPositionReference(q_ref);
+        std::cout<<"q_ref: "<<q_ref.transpose()<<std::endl;
+
+        Eigen::VectorXd q;
+        _robot->sense();
+        _robot->getJointPosition(q);
+        std::cout<<"q: "<<q.transpose()<<std::endl;
+
         return true;
     }
 
