@@ -22,14 +22,14 @@
 #include <boost/shared_ptr.hpp>
 #include <RobotInterfaceOROCOS/RobotInterfaceOROCOS.h>
 
-class robot_interface_orocos_test: public RTT::TaskContext {
+class orocos_test_homing: public RTT::TaskContext {
 public:
-    robot_interface_orocos_test(std::string const & name):
+    orocos_test_homing(std::string const & name):
         RTT::TaskContext(name)
     {
         //this->setActivity(new RTT::Activity(1, 0.01));
 
-        this->addOperation("attachToRobot", &robot_interface_orocos_test::attachToRobot,
+        this->addOperation("attachToRobot", &orocos_test_homing::attachToRobot,
                     this, RTT::ClientThread);
         
     }
@@ -122,4 +122,4 @@ private:
     bool start_position_trj;
 };
 
-ORO_CREATE_COMPONENT_LIBRARY()ORO_LIST_COMPONENT_TYPE(robot_interface_orocos_test)
+ORO_CREATE_COMPONENT_LIBRARY()ORO_LIST_COMPONENT_TYPE(orocos_test_homing)
