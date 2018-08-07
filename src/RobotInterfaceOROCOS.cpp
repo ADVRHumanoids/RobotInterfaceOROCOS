@@ -141,10 +141,10 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
         //...
 
         //4) Torque Ctrl
-        try{_torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
-            new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
-                                      joint_names.size(), _task_ptr, _task_peer_ptr));
-        }catch(...){return false;}
+        //try{_torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
+        //    new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
+        //                              joint_names.size(), _task_ptr, _task_peer_ptr));
+        //}catch(...){return false;}
 
         LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
 
@@ -245,13 +245,13 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
             {
                 _position_ctrl.at(it->first)->cmd.angles[i] =
                         _q_ref[this->getDofIndex(it->second.at(i))];
-                _torque_ctrl.at(it->first)->cmd.torques[i] =
-                        _tau_ref[this->getDofIndex(it->second.at(i))];
+                //_torque_ctrl.at(it->first)->cmd.torques[i] =
+                //        _tau_ref[this->getDofIndex(it->second.at(i))];
             }
 
 
             _position_ctrl.at(it->first)->write();
-            _torque_ctrl.at(it->first)->write();
+            //_torque_ctrl.at(it->first)->write();
 
 
     }
