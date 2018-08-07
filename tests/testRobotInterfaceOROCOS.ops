@@ -28,8 +28,8 @@ import("rtt-gazebo-robot-sim")
 loadComponent("cogimon","cogimon::robotSim")
 setActivity("cogimon",0,11,ORO_SCHED_OTHER)
 
-var string urdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/iit-cogimon-ros-pkg/cogimon_urdf/urdf/cogimon.urdf"
-var string srdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/robots/iit-cogimon-ros-pkg/cogimon_srdf/srdf/cogimon.srdf"
+var string urdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/configs/ADVR_shared/cogimon/urdf/cogimon.urdf"
+var string srdf_path = os.getenv("ROBOTOLOGY_ROOT") + "/configs/ADVR_shared/cogimon/srdf/cogimon.srdf"
 cogimon.loadURDFAndSRDF(urdf_path, srdf_path)
 cogimon.getModel("cogimon")
 cogimon.configure()
