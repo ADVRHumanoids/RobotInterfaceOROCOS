@@ -19,6 +19,7 @@
 
 #include <RobotInterfaceOROCOS/RobotInterfaceOROCOS.h>
 #include <rtt/Logger.hpp>
+#include <XCM/XBotUtils.h>
 
 REGISTER_SO_LIB_(XBot::RobotInterfaceOROCOS, XBot::RobotInterface);
 
@@ -77,7 +78,7 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
     cfg.set_parameter("TaskContextPtr", task);
     cfg.set_parameter("TaskPeerContextPtr", task_ptr);
 
-    _robot = XBot::RobotInterface::getRobot(cfg, robot_name);
+    _robot = XBot::RobotInterface::getRobot(cfg, robot_name +  std::to_string(XBot::get_time_ns()));
     if(_robot)
     {
         LOG(Warning)<<"ROBOT LOADED IN ROBOT INTERFACE OROCOS"<<ENDLOG();
