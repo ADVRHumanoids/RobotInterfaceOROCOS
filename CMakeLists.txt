@@ -155,6 +155,19 @@ target_link_libraries(robot_interface_orocos_test
    RobotInterfaceOROCOS
 )
 
+orocos_component(orocos_test_homing
+tests/testHomingRobotInterfaceOROCOS.cpp
+${testHomingRobotInterfaceOROCOS_INCLUDES})
+set_property(TARGET orocos_test_homing APPEND PROPERTY COMPILE_DEFINITIONS RTT_COMPONENT)
+
+target_link_libraries(orocos_test_homing
+   ${OROCOS-RTT_LIBRARIES}
+   ${Boost_LIBRARIES}
+   ${RST-RT_LIBRARIES}
+   ${XBotInterface_LIBRARIES}
+   RobotInterfaceOROCOS
+)
+
 install (TARGETS
          LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 orocos_generate_package(INCLUDE_DIRS include)
