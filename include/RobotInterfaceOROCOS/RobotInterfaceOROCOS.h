@@ -28,6 +28,7 @@
 #include <rst-rt/robot/JointState.hpp>
 #include <rst-rt/kinematics/JointAngles.hpp>
 #include <rst-rt/dynamics/JointTorques.hpp>
+#include <rst-rt/dynamics/JointImpedance.hpp>
 #include <rst-rt/dynamics/Wrench.hpp>
 #include <rst-rt/robot/IMU.hpp>
 #include <std_msgs/Float64.h>
@@ -36,6 +37,8 @@
 
 #include <rtt/os/TimeService.hpp>
 #include <rtt/Time.hpp>
+
+
 
 using namespace std;
 using namespace RTT;
@@ -149,6 +152,8 @@ struct FeedbackModes {
     static constexpr const char* positionFeedback = "JointPosition";
 };
 
+class gain_parser;
+
 class RobotInterfaceOROCOS : public RobotInterface, os::TimeService
 {
 
@@ -157,6 +162,7 @@ class RobotInterfaceOROCOS : public RobotInterface, os::TimeService
 public:
     typedef JointCtrl<kinematics::JointAngles> JointPositionController;
     typedef JointCtrl<dynamics::JointTorques> JointTorqueController;
+    typedef JointCtrl<dynamics::JointImpedance> JointImpedanceController;
     typedef Sensor<robot::JointState> JointFeedback;
     typedef Sensor<dynamics::Wrench> ForceTorqueFeedback;
     typedef Sensor<robot::IMU> IMUFeedback;
@@ -171,6 +177,7 @@ public:
     RobotInterfaceOROCOS() {}
 
     virtual bool set_control_mode_internal ( int joint_id, const ControlMode& control_mode );
+    virtual bool setControlMode(const std::string& chain_name, const ControlMode& control_mode);
 
     virtual double getTime() const;
 
@@ -212,20 +219,44 @@ private:
 
     map<KinematicChainName, JointPositionController::Ptr> _position_ctrl;
     map<KinematicChainName, JointTorqueController::Ptr> _torque_ctrl;
+    map<KinematicChainName, JointImpedanceController::Ptr> _impedance_ctrl;
 
     map<KinematicChainName, JointFeedback::Ptr> _joint_feedback;
     map<ForceTorqueFrame, ForceTorqueFeedback::Ptr> _ft_feedback;
     map<IMUFrame, IMUFeedback::Ptr> _imu_feedback;
 
+    /**
+     * The _map_kin_chain_current_control_mode is a map between the kinematic chain and the control mode set in the
+     * kinematic chain inside the RobotInterfaceOROCOS.
+     * The _map_joint_current_control_policy is a map between the joint and its control policy set in the config file.
+     *
+     * The real control policy is set by the config file, the control mode can be changed from the RobotInterfaceOROCOS only
+     * if all the joints of the kinematic chain are in the right control policy.
+     *
+     * Given the control policy, only a sub set of control modes are available:
+     *
+     * | CONTROL POLICY |    CONTROL MODES    |
+     * ----------------------------------------
+     * |    Pos3b       |  JointPositionCtrl  |
+     *
+     * |  Impedance4d   |  JointImpedanceCtrl,|
+     *                     JointTorqueCtrl
+     */
+    map<KinematicChainName, std::string> _map_kin_chain_current_control_mode;
+
     //For now these variable are motor side AND link side
     VectorXd _q;
     VectorXd _qdot;
     VectorXd _tau;
+    VectorXd _k;
+    VectorXd _d;
 
     VectorXd _q_ref;
     VectorXd _tau_ref;
     VectorXd _stiffness_ref;
     VectorXd _damping_ref;
+    VectorXd _k_ref;
+    VectorXd _d_ref;
 
 
     ForceTorqueSensor::ConstPtr _ftptr;
@@ -236,6 +267,19 @@ private:
     Vector3d _tmp_vector3d_2;
     Quaterniond _tmp_quaternion;
     Eigen::Matrix<float, 4, 1> _tmp_vector_4f;
+
+    bool setInitialImpedanceFromSRDF(const std::string& srdf_path);
+    void fromCtrlPolicyToCtrlMode(const ControlMode& ctrl_policy, std::string& ctrl_mode)
+    {
+        if(ctrl_policy == ControlMode::Position())
+            ctrl_mode = XBot::ControlModes::JointPositionCtrl;
+        else if(ctrl_policy == ControlMode::PosImpedance())
+            ctrl_mode = XBot::ControlModes::JointImpedanceCtrl;
+        else if(ctrl_policy == ControlMode::Effort())
+            ctrl_mode = XBot::ControlModes::JointTorqueCtrl;
+        else
+            ctrl_mode = ""; //very bad...
+    }
 
 };
 

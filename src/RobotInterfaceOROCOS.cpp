@@ -18,6 +18,7 @@
 */
 
 #include <RobotInterfaceOROCOS/RobotInterfaceOROCOS.h>
+#include <RobotInterfaceOROCOS/parser.h>
 #include <rtt/Logger.hpp>
 #include <XCM/XBotUtils.h>
 
@@ -88,6 +89,42 @@ bool XBot::RobotInterfaceOROCOS::attachToRobot(const string &robot_name,
     return false;
 }
 
+bool XBot::RobotInterfaceOROCOS::setInitialImpedanceFromSRDF(const std::string& srdf_path)
+{
+    gain_parser _gain_parser;
+
+    if(!_gain_parser.initFile(srdf_path))
+    {
+        LOG(Info)<<"initFile failed!"<<ENDLOG();
+        return false;
+    }
+    else
+    {
+        _gain_parser.printGains();
+
+        map<KinematicChainName, JointImpedanceController::Ptr>::iterator it = _impedance_ctrl.begin();
+        for(it; it != _impedance_ctrl.end(); it++)
+        {
+            std::string kinematic_chain_name = it->first;
+            JointImpedanceController::Ptr impedance_controller = it->second;
+
+            RTT::log(RTT::Info)<<kinematic_chain_name<<" impedance:"<<RTT::endlog();
+            JointNames joint_names = _map_kin_chains_joints[kinematic_chain_name];
+
+            for(unsigned int i = 0; i < joint_names.size(); ++i)
+            {
+                XBot::ImpedanceGain impedance;
+                _gain_parser.Gains.getImpedance(kinematic_chain_name, joint_names[i], impedance);
+                impedance_controller->cmd.stiffness[i] = impedance.stiffness;
+                impedance_controller->cmd.damping[i] = impedance.damping;
+                RTT::log(RTT::Info)<<"  "<<impedance.joint_name<<" stiffness: "<<impedance.stiffness<<" damping: "<<impedance.damping<<RTT::endlog();
+            }
+
+        }
+        return true;
+    }
+}
+
 bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
 {
     LOG(Info)<<"Constructing OROCOS implementation of RobotInterface!"<<ENDLOG();
@@ -96,11 +133,15 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
     _q.setZero(this->getJointNum());
     _qdot.setZero(this->getJointNum());
     _tau.setZero(this->getJointNum());
+    _k.setZero(this->getJointNum());
+    _d.setZero(this->getJointNum());
 
     _q_ref.setZero(this->getJointNum());
     _tau_ref.setZero(this->getJointNum());
     _stiffness_ref.setZero(this->getJointNum());
     _damping_ref.setZero(this->getJointNum());
+    _k_ref.setZero(this->getJointNum());
+    _d_ref.setZero(this->getJointNum());
 
     if( !cfg.get_parameter("TaskContextPtr",_task_ptr)){
         LOG(Error) << "ERROR in " << __func__ << "! Invalid object with key \"TaskContextPtr\" inside the parameter map given as a second argument to getRobot()! Make sure it is a shared_ptr<TaskContext>." << ENDLOG();
@@ -139,17 +180,26 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
         }catch(...){return false;}
 
         //3) Impedance Ctrl
-        //...
+        try{_impedance_ctrl[kin_chain_name] = JointImpedanceController::Ptr(
+            new JointImpedanceController(ControlModes::JointImpedanceCtrl,kin_chain_name,
+                                         joint_names.size(), _task_ptr, _task_peer_ptr));
+        }catch(...){return false;}
 
         //4) Torque Ctrl
-        //try{_torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
-        //    new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
-        //                              joint_names.size(), _task_ptr, _task_peer_ptr));
-        //}catch(...){return false;}
+        try{_torque_ctrl[kin_chain_name] = JointTorqueController::Ptr(
+            new JointTorqueController(ControlModes::JointTorqueCtrl, kin_chain_name,
+                                      joint_names.size(), _task_ptr, _task_peer_ptr));
+        }catch(...){return false;}
 
         LOG(Info)<<"Added "<<kin_chain_name<<" port and data"<<ENDLOG();
 
     }
+
+    // INITIALIZE IMPEDANCE GAINS FROM SRDF
+    if(!setInitialImpedanceFromSRDF(this->getSrdfPath()))
+        LOG(Info)<<"Impedance Gains have not been loaded from SRDF file!"<<ENDLOG();
+    else
+        LOG(Info)<<"Impedance Gains loaded from SRDF file!"<<ENDLOG();
 
     //SECOND FT SENSORS
     OperationCaller<vector<ForceTorqueFrame> (void) > getForceTorqueSensorsFrames
@@ -187,6 +237,8 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
 
 bool XBot::RobotInterfaceOROCOS::sense_internal()
 {
+    //HERE WE SHOULD CONSIDER ALSO STIFFNESS AND DAMPING FEEDBACK TO HAVE PROPER INITIALIZATION!
+
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
@@ -202,6 +254,8 @@ bool XBot::RobotInterfaceOROCOS::sense_internal()
 
             _tau[this->getDofIndex(it->second.at(i))] =
                     _joint_feedback.at(it->first)->feedback.torques[i];
+
+
         }
     }
 
@@ -238,6 +292,7 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
     this->getStiffness(_stiffness_ref);
     this->getDamping(_damping_ref);
 
+    //HERE WE SHOULD CHECK IF THE SINGLE JOINT IS IN THE CONTROL MODE DESIRED FOR THE KINEMATIC CHAIN!
     map<KinematicChainName, JointNames >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
@@ -246,13 +301,23 @@ bool XBot::RobotInterfaceOROCOS::move_internal()
             {
                 _position_ctrl.at(it->first)->cmd.angles[i] =
                         _q_ref[this->getDofIndex(it->second.at(i))];
-                //_torque_ctrl.at(it->first)->cmd.torques[i] =
-                //        _tau_ref[this->getDofIndex(it->second.at(i))];
+                _torque_ctrl.at(it->first)->cmd.torques[i] =
+                        _tau_ref[this->getDofIndex(it->second.at(i))];
+                _impedance_ctrl.at(it->first)->cmd.stiffness[i] =
+                        _stiffness_ref[this->getDofIndex(it->second.at(i))];
+                _impedance_ctrl.at(it->first)->cmd.damping[i] =
+                        _damping_ref[this->getDofIndex(it->second.at(i))];
             }
 
+            if(_map_kin_chain_current_control_mode[it->first] == XBot::ControlModes::JointTorqueCtrl)
+            {
+                _impedance_ctrl.at(it->first)->cmd.damping.setZero(it->second.size());
+                _impedance_ctrl.at(it->first)->cmd.stiffness.setZero(it->second.size());
+            }
 
             _position_ctrl.at(it->first)->write();
-            //_torque_ctrl.at(it->first)->write();
+            _torque_ctrl.at(it->first)->write();
+            _impedance_ctrl.at(it->first)->write();
 
 
     }
@@ -330,7 +395,60 @@ bool XBot::RobotInterfaceOROCOS::sense_hands()
 
 bool XBot::RobotInterfaceOROCOS::set_control_mode_internal ( int joint_id, const ControlMode& control_mode )
 {
-    return true;
+    LOG(Error)<<__PRETTY_FUNCTION__<<" not implemented in RobotInterfaceOROCOS"<<ENDLOG();
+    return false;
+}
+
+bool XBot::RobotInterfaceOROCOS::setControlMode(const std::string& chain_name, const ControlMode& control_mode)
+{
+    if ( _map_kin_chain_current_control_mode.find(chain_name) == _map_kin_chain_current_control_mode.end() )
+    {
+      LOG(Error)<<"Kinematic chain "<<chain_name<<" does not exists!"<<ENDLOG();
+      return false;
+    }
+    else
+    {
+        std::string new_ctrl_mode;
+        fromCtrlPolicyToCtrlMode(control_mode, new_ctrl_mode);
+
+        if(new_ctrl_mode != "")
+        {
+            std::string current_ctrl_mode = _map_kin_chain_current_control_mode[chain_name];
+
+            if(current_ctrl_mode == XBot::ControlModes::JointPositionCtrl)
+            {
+                if(new_ctrl_mode != XBot::ControlModes::JointPositionCtrl){
+                    LOG(Error)<<"Can not change control mode from joint position!"<<ENDLOG();
+                    return false;
+                }
+                return true;
+            }
+
+            if(current_ctrl_mode == XBot::ControlModes::JointImpedanceCtrl ||
+               current_ctrl_mode == XBot::ControlModes::JointTorqueCtrl)
+            {
+                if(new_ctrl_mode == XBot::ControlModes::JointPositionCtrl)
+                {
+                    LOG(Error)<<"Can not change control mode to joint position!"<<ENDLOG();
+                    return false;
+                }
+                else
+                {
+                    _map_kin_chain_current_control_mode[chain_name] = new_ctrl_mode;
+                    return true;
+                }
+            }
+
+
+        }
+        else
+        {
+            LOG(Error)<<"control mode not supported for kinematic chain "<<chain_name<<ENDLOG();
+            return false;
+        }
+
+    }
+
 }
 
 

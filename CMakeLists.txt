@@ -79,7 +79,8 @@ file(GLOB_RECURSE XBotInterfaceOROCOS_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/incl
 
 
 add_library(RobotInterfaceOROCOS SHARED ${XBotInterfaceOROCOS_INCLUDES} 
-                                        src/RobotInterfaceOROCOS.cpp)
+                                        src/RobotInterfaceOROCOS.cpp
+                                        src/parser.cpp)
 
                    
 target_link_libraries(${PROJECT_NAME}
