@@ -96,7 +96,39 @@ bool XBot::RobotInterfaceOROCOS::setInitialImpedanceFromSRDF(const std::string& 
     if(!_gain_parser.initFile(srdf_path))
     {
         LOG(Info)<<"initFile failed!"<<ENDLOG();
-        return false;
+        
+        // NOTE HACK
+        map<KinematicChainName, JointImpedanceController::Ptr>::iterator it = _impedance_ctrl.begin();
+        for(it; it != _impedance_ctrl.end(); it++)
+        {
+            std::string kinematic_chain_name = it->first;
+            JointImpedanceController::Ptr impedance_controller = it->second;
+
+            RTT::log(RTT::Info)<<kinematic_chain_name<<" impedance:"<<RTT::endlog();
+            JointNames joint_names = _map_kin_chains_joints[kinematic_chain_name];
+
+            for(unsigned int i = 0; i < joint_names.size(); ++i)
+            {
+                XBot::ImpedanceGain impedance;
+               impedance.stiffness = 10.0;
+               impedance.damping = 1.0;
+
+                _stiffness_ref[this->getDofIndex(joint_names[i])] = impedance.stiffness;
+                _damping_ref[this->getDofIndex(joint_names[i])] = impedance.damping;
+
+                impedance_controller->cmd.stiffness[i] = impedance.stiffness;
+                impedance_controller->cmd.damping[i] = impedance.damping;
+
+                RTT::log(RTT::Info)<<"  "<<impedance.joint_name<<" stiffness: "<<impedance.stiffness<<" damping: "<<impedance.damping<<RTT::endlog();
+            }
+
+        }
+
+        this->setStiffness(_stiffness_ref);
+        this->setDamping(_damping_ref);
+        
+        
+        return true;
     }
     else
     {
@@ -238,10 +270,13 @@ bool XBot::RobotInterfaceOROCOS::init_robot(const XBot::ConfigOptions& cfg)
 bool XBot::RobotInterfaceOROCOS::post_init()
 {
     // INITIALIZE IMPEDANCE GAINS FROM SRDF
-    if(!setInitialImpedanceFromSRDF(this->getSrdfPath()))
-        LOG(Info)<<"Impedance Gains have not been loaded from SRDF file!"<<ENDLOG();
-    else
+    if(!setInitialImpedanceFromSRDF(this->getSrdfPath())) {
+        LOG(Warning)<<"Impedance Gains have not been loaded from SRDF file!"<<ENDLOG();
+        
+    }
+    else {
         LOG(Info)<<"Impedance Gains loaded from SRDF file!"<<ENDLOG();
+    }
 
     sense();
 
