@@ -177,7 +177,6 @@ public:
     RobotInterfaceOROCOS() {}
 
     virtual bool set_control_mode_internal ( int joint_id, const ControlMode& control_mode );
-    virtual bool setControlMode(const std::string& chain_name, const ControlMode& control_mode);
 
     virtual double getTime() const;
 
@@ -205,6 +204,7 @@ public:
 protected:
 
     virtual bool init_robot(const XBot::ConfigOptions& cfg);
+    virtual bool post_init();
     virtual bool move_internal();
     virtual bool sense_internal();
     virtual bool read_sensors();
@@ -225,24 +225,6 @@ private:
     map<ForceTorqueFrame, ForceTorqueFeedback::Ptr> _ft_feedback;
     map<IMUFrame, IMUFeedback::Ptr> _imu_feedback;
 
-    /**
-     * The _map_kin_chain_current_control_mode is a map between the kinematic chain and the control mode set in the
-     * kinematic chain inside the RobotInterfaceOROCOS.
-     * The _map_joint_current_control_policy is a map between the joint and its control policy set in the config file.
-     *
-     * The real control policy is set by the config file, the control mode can be changed from the RobotInterfaceOROCOS only
-     * if all the joints of the kinematic chain are in the right control policy.
-     *
-     * Given the control policy, only a sub set of control modes are available:
-     *
-     * | CONTROL POLICY |    CONTROL MODES    |
-     * ----------------------------------------
-     * |    Pos3b       |  JointPositionCtrl  |
-     *
-     * |  Impedance4d   |  JointImpedanceCtrl,|
-     *                     JointTorqueCtrl
-     */
-    map<KinematicChainName, std::string> _map_kin_chain_current_control_mode;
 
     //For now these variable are motor side AND link side
     VectorXd _q;
@@ -269,17 +251,7 @@ private:
     Eigen::Matrix<float, 4, 1> _tmp_vector_4f;
 
     bool setInitialImpedanceFromSRDF(const std::string& srdf_path);
-    void fromCtrlPolicyToCtrlMode(const ControlMode& ctrl_policy, std::string& ctrl_mode)
-    {
-        if(ctrl_policy == ControlMode::Position())
-            ctrl_mode = XBot::ControlModes::JointPositionCtrl;
-        else if(ctrl_policy == ControlMode::PosImpedance())
-            ctrl_mode = XBot::ControlModes::JointImpedanceCtrl;
-        else if(ctrl_policy == ControlMode::Effort())
-            ctrl_mode = XBot::ControlModes::JointTorqueCtrl;
-        else
-            ctrl_mode = ""; //very bad...
-    }
+
 
 };
 
