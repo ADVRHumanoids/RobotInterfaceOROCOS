@@ -69,6 +69,17 @@ public:
 //             RTT::log(RTT::Info)<<_robot->getTime()<<RTT::endlog();
             return;
         }
+        
+        // stiffness test
+        Eigen::VectorXd k_ref;
+        k_ref.setZero(7);
+        
+        k_ref(5) = 100.0;
+        
+        _robot->chain("right_arm").setStiffness(k_ref);
+        _robot->move();
+        
+        
     
     
     }
