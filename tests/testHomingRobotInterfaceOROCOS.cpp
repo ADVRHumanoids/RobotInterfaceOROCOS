@@ -71,13 +71,23 @@ public:
         }
         
         // stiffness test
-        Eigen::VectorXd k_ref;
-        k_ref.setZero(7);
-        
-        k_ref(5) = 100.0;
-        
-        _robot->chain("right_arm").setStiffness(k_ref);
-        _robot->move();
+//         Eigen::VectorXd k_ref;
+//         k_ref.setZero(7);
+//         
+//         k_ref(5) = 50.0;
+//         
+//         _robot->chain("right_arm").setStiffness(k_ref);
+//         _robot->move();
+//         
+           // torque test
+//         Eigen::VectorXd tau_ref;
+//         tau_ref.setZero(7);
+//         
+//         tau_ref(4) = 10.0;
+//         tau_ref(5) = 10.0;
+//         
+//         _robot->chain("right_arm").setEffortReference(tau_ref);
+//         _robot->move();
         
         
     
